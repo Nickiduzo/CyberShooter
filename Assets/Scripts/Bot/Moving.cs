@@ -28,6 +28,10 @@ public class Moving : MonoBehaviour
     {
         //CheckOnGround();
         //Jump();
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            anim.SetTrigger("Dance");
+        }
         Move();
         ChangeAnimation();
         RotateBot();
