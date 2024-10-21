@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 221884723}
   m_Layer: 0
   m_Name: Building
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7668,6 +7668,8 @@ GameObject:
   - component: {fileID: 631335429}
   - component: {fileID: 631335432}
   - component: {fileID: 631335431}
+  - component: {fileID: 631335434}
+  - component: {fileID: 631335433}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -7687,17 +7689,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceed86dd5aa99a4fbda5ed383f0467f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 1709720730}
   cameraTransform: {fileID: 330585546}
   mouseSensitivity: 100
   lookLimit: 50
   walkSpeed: 3
   sprintSpeed: 6
-  jumpForce: 5
-  checkDistance: 1.1
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!4 &631335430
 Transform:
   m_ObjectHideFlags: 0
@@ -7707,7 +7703,7 @@ Transform:
   m_GameObject: {fileID: 631335428}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.915, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7764,6 +7760,41 @@ CapsuleCollider:
   m_Height: 1.82
   m_Direction: 1
   m_Center: {x: 0, y: 0.998074, z: 0}
+--- !u!114 &631335433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631335428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b642f178456bee444bfada2d826861c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpForce: 125
+  OnJump:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLand:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFall:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &631335434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631335428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6f342f0e7d98a44aa9bb5825b30da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 1709720730}
 --- !u!1 &699668372
 GameObject:
   m_ObjectHideFlags: 0
@@ -7999,7 +8030,7 @@ GameObject:
   - component: {fileID: 923078869}
   m_Layer: 0
   m_Name: AnotherBuilding
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
