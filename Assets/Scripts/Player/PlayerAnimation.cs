@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    [SerializeField] private Animator anim;
+    
     private bool isMoving;
     private bool isRuning;
-
-    [SerializeField] private Animator anim;
 
     private float verticalInput;
     private float horizontalInput;
 
+    private bool isGrounded = false;
     private void Start()
     {
         PlayerJump playerJump = GetComponent<PlayerJump>();
@@ -38,14 +39,20 @@ public class PlayerAnimation : MonoBehaviour
     }
     private void MoveAnimation()
     {
-        isMoving = horizontalInput != 0 || verticalInput != 0;
-        anim.SetBool("isMove", isMoving);
+        if (isGrounded)
+        {
+            isMoving = horizontalInput != 0 || verticalInput != 0;
+            anim.SetBool("isMove", isMoving);
+        }
     }
 
     private void RunAnimation()
     {
-        isRuning = Input.GetKey(KeyCode.LeftShift) && isMoving;
-        anim.SetBool("isRun", isRuning);
+        if (isGrounded)
+        {
+            isRuning = Input.GetKey(KeyCode.LeftShift) && isMoving;
+            anim.SetBool("isRun", isRuning);
+        }
     }
 
     private void PlayJumpAnimation() => anim.SetTrigger("isJump");
@@ -54,11 +61,27 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Dance()
     {
-        if (Input.GetKeyDown(KeyCode.G)) anim.SetTrigger("Dance");
+        if (Input.GetKeyDown(KeyCode.G) && isGrounded) anim.SetTrigger("Dance");
     }
 
-    private void OnDisable()
+    private void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building")) isGrounded = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
     }
 }
