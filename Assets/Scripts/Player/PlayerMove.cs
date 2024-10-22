@@ -14,13 +14,10 @@ public class PlayerMove : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
 
-    private PlayerState state;
-
     private Rigidbody rb;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        state = PlayerState.Melee;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
