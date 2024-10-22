@@ -17,18 +17,17 @@ public class PlayerAnimation : MonoBehaviour
         if(playerJump != null)
         {
             playerJump.OnJump.AddListener(PlayJumpAnimation);
-            playerJump.OnFall.AddListener(PlayFallAnimation);
-            playerJump.OnLand.AddListener(PlayLandAnimation);
         }
     }
 
     private void Update()
     {
+        anim.SetBool("Grounded", isGrounded);
+
         verticalInput = Input.GetAxis("Vertical");
         horizontalInput = Input.GetAxis("Horizontal");
 
         Dance();
-
         MoveBehaviour();
     }
 
@@ -39,29 +38,24 @@ public class PlayerAnimation : MonoBehaviour
     }
     private void MoveAnimation()
     {
-        if (isGrounded)
-        {
-            isMoving = horizontalInput != 0 || verticalInput != 0;
-            anim.SetBool("isMove", isMoving);
-        }
+        isMoving = horizontalInput != 0 || verticalInput != 0;
+        anim.SetBool("isMove", isMoving);
     }
 
     private void RunAnimation()
     {
-        if (isGrounded)
-        {
-            isRuning = Input.GetKey(KeyCode.LeftShift) && isMoving;
-            anim.SetBool("isRun", isRuning);
-        }
+        isRuning = Input.GetKey(KeyCode.LeftShift) && isMoving;
+        anim.SetBool("isRun", isRuning);
     }
 
-    private void PlayJumpAnimation() => anim.SetTrigger("isJump");
-    private void PlayFallAnimation() => anim.SetTrigger("isFall");
-    private void PlayLandAnimation() => anim.SetTrigger("isLand");
+    private void PlayJumpAnimation()
+    {
+        anim.SetBool("isJump", true);
+    }
 
     private void Dance()
     {
-        if (Input.GetKeyDown(KeyCode.G) && isGrounded) anim.SetTrigger("Dance");
+        if (Input.GetKeyDown(KeyCode.G)) anim.SetTrigger("Dance");
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -69,6 +63,7 @@ public class PlayerAnimation : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+            anim.SetBool("isJump", false);
         }
     }
 

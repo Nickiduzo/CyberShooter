@@ -6,8 +6,6 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private float jumpForce = 3f;
 
     public UnityEvent OnJump;
-    public UnityEvent OnLand;
-    public UnityEvent OnFall;
 
     private bool isGrounded = false;
 
@@ -37,7 +35,7 @@ public class PlayerJump : MonoBehaviour
     {
         if (!isGrounded && rb.velocity.y < 0)
         {
-            OnFall?.Invoke();
+            //OnFall?.Invoke();
         }
     }
 
@@ -46,7 +44,7 @@ public class PlayerJump : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
-            OnLand?.Invoke();
+            //OnLand?.Invoke();
         }
     }
 
