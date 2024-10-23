@@ -41,7 +41,7 @@ public class PlayerSwordAttack : MonoBehaviour
     {
         if (currentState == PlayerState.Melee)
         {
-            print("Make Kick");
+            //print("Make Kick");
             PlayAnimation?.Invoke(1);
         }
     }
@@ -50,7 +50,7 @@ public class PlayerSwordAttack : MonoBehaviour
     {
         if(currentState == PlayerState.Melee)
         {
-            print("Double attack");
+            //print("Double attack");
             PlayAnimation?.Invoke(2);
         }
     }
@@ -59,7 +59,7 @@ public class PlayerSwordAttack : MonoBehaviour
     {
         if(currentState == PlayerState.Melee)
         {
-            print("Charge attack");
+            //print("Charge attack");
             PlayAnimation.Invoke(3);
         }
     }
@@ -68,8 +68,10 @@ public class PlayerSwordAttack : MonoBehaviour
     {
         if (currentState == PlayerState.Melee)
         {
-            print("Charge sprint attack");
+            //print("Charge sprint attack");
             PlayAnimation.Invoke(4);
         }
     }
+
+    public void MakeSwordSound() => AudioManager.instanse.Play("Sword");
 }

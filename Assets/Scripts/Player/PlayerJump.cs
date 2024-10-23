@@ -27,6 +27,7 @@ public class PlayerJump : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
+            AudioManager.instanse.Play("Jump");
             OnJump?.Invoke();
         }
     }

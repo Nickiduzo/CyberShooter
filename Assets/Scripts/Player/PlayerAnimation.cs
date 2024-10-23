@@ -73,7 +73,11 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Dance()
     {
-        if (Input.GetKeyDown(KeyCode.G)) anim.SetTrigger("Dance");
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            anim.SetTrigger("Dance");
+            AudioManager.instanse.Play("China");
+        }
     }
 
     private void ShotAnimation()
