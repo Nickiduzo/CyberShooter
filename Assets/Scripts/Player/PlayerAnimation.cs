@@ -7,8 +7,8 @@ public class PlayerAnimation : MonoBehaviour
     private bool isMoving;
     private bool isRuning;
 
-    private float verticalInput;
-    private float horizontalInput;
+    private float x;
+    private float y;
 
     private bool isGrounded = false;
     private void Start()
@@ -20,11 +20,14 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetBool("Grounded", isGrounded);
 
-        verticalInput = Input.GetAxis("Vertical");
-        horizontalInput = Input.GetAxis("Horizontal");
+        x = Input.GetAxis("Horizontal");
+        y = Input.GetAxis("Vertical");
+
+
+        anim.SetFloat("x", x);
+        anim.SetFloat("y",y);
 
         Dance();
-        MoveBehaviour();
     }
 
     private void InitializeListeners()
@@ -33,7 +36,6 @@ public class PlayerAnimation : MonoBehaviour
         if(playerJump != null)
         {
             playerJump.OnJump.AddListener(PlayJumpAnimation);
-            
         }
 
         PlayerSwordAttack playerSword = GetComponent<PlayerSwordAttack>();
@@ -47,23 +49,6 @@ public class PlayerAnimation : MonoBehaviour
         {
             playerRifle.MakeShot.AddListener(ShotAnimation);
         }
-    }
-
-    private void MoveBehaviour()
-    {
-        MoveAnimation();
-        RunAnimation();
-    }
-    private void MoveAnimation()
-    {
-        isMoving = horizontalInput != 0 || verticalInput != 0;
-        anim.SetBool("isMove", isMoving);
-    }
-
-    private void RunAnimation()
-    {
-        isRuning = Input.GetKey(KeyCode.LeftShift) && isMoving;
-        anim.SetBool("isRun", isRuning);
     }
 
     private void PlayJumpAnimation()
