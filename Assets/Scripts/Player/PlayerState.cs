@@ -1,6 +1,6 @@
 public enum PlayerState
 {
-    Firegun = 1,
+    Pistols = 1,
     Melee,
     Empty
 }

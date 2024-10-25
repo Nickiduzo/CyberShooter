@@ -18,7 +18,6 @@ public class PlayerJump : MonoBehaviour
     private void FixedUpdate()
     {
         Jump();
-        CheckFall();
     }
 
     private void Jump()
@@ -27,31 +26,25 @@ public class PlayerJump : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
-            AudioManager.instanse.Play("Jump");
             OnJump?.Invoke();
-        }
-    }
-
-    private void CheckFall()
-    {
-        if (!isGrounded && rb.velocity.y < 0)
-        {
-            //OnFall?.Invoke();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") ||
+            collision.gameObject.CompareTag("Builidng"))
         {
             isGrounded = true;
-            //OnLand?.Invoke();
         }
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building")) isGrounded = true;
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building"))
+        {
+            isGrounded = true;
+        }
     }
 
     private void OnCollisionExit(Collision collision)

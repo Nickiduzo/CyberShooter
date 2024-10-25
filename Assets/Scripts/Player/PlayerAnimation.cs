@@ -20,14 +20,27 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetBool("Grounded", isGrounded);
 
+        Dance();
+        MoveBehaviour();
+    }
+
+    private void MoveBehaviour()
+    {
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
+        if(y >= 0.6f && !Input.GetKey(KeyCode.LeftShift))
+        {
+            y = 0.6f;
+        }
+        else if(y == 0.6f && Input.GetKey(KeyCode.LeftShift))
+        {
+            y = 1f;
+        }
 
 
         anim.SetFloat("x", x);
-        anim.SetFloat("y",y);
+        anim.SetFloat("y", y);
 
-        Dance();
     }
 
     private void InitializeListeners()
@@ -61,7 +74,7 @@ public class PlayerAnimation : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             anim.SetTrigger("Dance");
-            AudioManager.instanse.Play("China");
+            AudioManager.instanse.Play("Polskaya");
         }
     }
 
@@ -107,7 +120,7 @@ public class PlayerAnimation : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building"))
         {
             isGrounded = true;
             anim.SetBool("isJump", false);
@@ -116,7 +129,10 @@ public class PlayerAnimation : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building")) isGrounded = true;
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building"))
+        {
+            isGrounded = true;
+        }
     }
 
     private void OnCollisionExit(Collision collision)

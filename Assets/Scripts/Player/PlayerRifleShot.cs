@@ -22,22 +22,18 @@ public class PlayerRifleShot : MonoBehaviour
 
     private void HandlerMoving()
     {
-        if(Input.GetMouseButton(1))
+        if (Input.GetMouseButton(0))
         {
-            if(Input.GetMouseButton(0))
-            {
-                Shot();
-                MakeShot?.Invoke();
-            }
+            Shot();
+            MakeShot?.Invoke();
         }
     }
 
     private void Shot()
     {
-        if (currentState == PlayerState.Firegun)
+        if (currentState == PlayerState.Pistols)
         {
             print("Make shot");
-            CreateShot();
         }
     }
 

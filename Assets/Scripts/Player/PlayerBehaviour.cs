@@ -6,8 +6,7 @@ public class PlayerBehaviour : MonoBehaviour
     
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] swords;
-    [SerializeField] private GameObject pistol;
-    [SerializeField] private GameObject rifle;
+    [SerializeField] private GameObject[] pistols;
 
     private void Start()
     {
@@ -22,14 +21,13 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SetPlayerState(PlayerState.Firegun);
+            SetPlayerState(PlayerState.Pistols);
         }
         else if(Input.GetKeyDown(KeyCode.Alpha3))
         {
             SetPlayerState(PlayerState.Empty);
         }
     }
-
     private void SetPlayerState(PlayerState newState)
     {
         currentState = newState;
@@ -46,9 +44,9 @@ public class PlayerBehaviour : MonoBehaviour
                 animator.SetLayerWeight(2,1);
                 SwitchSwords(true);
                 break;
-            case PlayerState.Firegun:
+            case PlayerState.Pistols:
                 animator.SetLayerWeight(1, 1);
-                rifle.SetActive(true);
+                SwitchPistols(true);
                 break;
             case PlayerState.Empty:
                 animator.SetLayerWeight(0, 1);
@@ -60,8 +58,15 @@ public class PlayerBehaviour : MonoBehaviour
     private void SwitchOffAll()
     {
         SwitchSwords(false);
-        rifle.SetActive(false);
-        //pistol.SetActive(false);
+        SwitchPistols(false);
+    }
+
+    private void SwitchPistols(bool activate)
+    {
+        for(int i = 0; i < pistols.Length;i++)
+        {
+            pistols[i].SetActive(activate);
+        }
     }
     private void SwitchSwords(bool activate)
     {

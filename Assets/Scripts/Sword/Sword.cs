@@ -1,12 +1,18 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Sword : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    public UnityEvent<int> OnHit;
+
+    private int damage = 25;
+
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision != null)
+        if(other.gameObject.CompareTag("Enemy"))
         {
-            print(collision.gameObject.name);
+            OnHit?.Invoke(damage);
         }
     }
 }
