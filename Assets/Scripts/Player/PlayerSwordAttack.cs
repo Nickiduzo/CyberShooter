@@ -8,8 +8,6 @@ public class PlayerSwordAttack : MonoBehaviour
 
     [SerializeField] private PlayerBehaviour playerBehaviour;
 
-    //[SerializeField] private ParticleSystem attackEffect;
-
     public UnityEvent<int> PlayAnimation;
 
     public bool isAttack;
@@ -40,33 +38,53 @@ public class PlayerSwordAttack : MonoBehaviour
 
     private void Attack()
     {
-        if (currentState == PlayerState.Melee)
+        if (currentState == PlayerState.TwoSwords)
         {
             PlayAnimation?.Invoke(1);
+        }
+
+        if(currentState == PlayerState.Sword)
+        {
+            PlayAnimation?.Invoke(5);
         }
     }
     
     private void DoubleAttack()
     {
-        if(currentState == PlayerState.Melee)
+        if(currentState == PlayerState.TwoSwords)
         {
             PlayAnimation?.Invoke(2);
+        }
+
+        if(currentState == PlayerState.Sword)
+        {
+            PlayAnimation?.Invoke(6);
         }
     }
 
     private void ChargeAttack()
     {
-        if(currentState == PlayerState.Melee)
+        if(currentState == PlayerState.TwoSwords)
         {
             PlayAnimation.Invoke(3);
+        }
+
+        if (currentState == PlayerState.Sword)
+        {
+            PlayAnimation?.Invoke(7);
         }
     }
 
     private void ChargeSprintAttack()
     {
-        if (currentState == PlayerState.Melee)
+        if (currentState == PlayerState.TwoSwords)
         {
             PlayAnimation.Invoke(4);
+        }
+
+        if (currentState == PlayerState.Sword)
+        {
+            PlayAnimation?.Invoke(8);
         }
     }
 }

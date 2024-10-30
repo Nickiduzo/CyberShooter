@@ -24,6 +24,8 @@ public class PlayerMove : MonoBehaviour
     private void Update()
     {
         HandleInput();
+
+
         RotatePlayer();
     }
 

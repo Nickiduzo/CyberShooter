@@ -6,7 +6,7 @@ public class PlayerBehaviour : MonoBehaviour
     
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] swords;
-    [SerializeField] private GameObject[] pistols;
+    [SerializeField] private GameObject sword;
 
     private void Awake()
     {
@@ -17,7 +17,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SetPlayerState(PlayerState.Melee);
+            SetPlayerState(PlayerState.TwoSwords);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -26,6 +26,10 @@ public class PlayerBehaviour : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Alpha3))
         {
             SetPlayerState(PlayerState.Empty);
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SetPlayerState(PlayerState.Sword);
         }
     }
     private void SetPlayerState(PlayerState newState)
@@ -40,17 +44,17 @@ public class PlayerBehaviour : MonoBehaviour
 
         switch (newState)
         {
-            case PlayerState.Melee:
+            case PlayerState.TwoSwords:
                 animator.SetLayerWeight(2,1);
                 SwitchSwords(true);
-                break;
-            case PlayerState.Pistols:
-                animator.SetLayerWeight(1, 1);
-                SwitchPistols(true);
                 break;
             case PlayerState.Empty:
                 animator.SetLayerWeight(0, 1);
                 SwitchOffAll();
+                break;
+            case PlayerState.Sword:
+                animator.SetLayerWeight(2, 1);
+                SwitchSword(true);
                 break;
         }
     }
@@ -58,16 +62,14 @@ public class PlayerBehaviour : MonoBehaviour
     private void SwitchOffAll()
     {
         SwitchSwords(false);
-        SwitchPistols(false);
+        SwitchSword(false);
     }
 
-    private void SwitchPistols(bool activate)
+    private void SwitchSword(bool activate)
     {
-        for(int i = 0; i < pistols.Length;i++)
-        {
-            pistols[i].SetActive(activate);
-        }
+        sword.gameObject.SetActive(activate);
     }
+
     private void SwitchSwords(bool activate)
     {
         for(int i = 0; i < swords.Length;i++)

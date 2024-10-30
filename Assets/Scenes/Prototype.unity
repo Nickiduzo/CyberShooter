@@ -769,6 +769,12 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &226462044 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5325940619906894884, guid: f6e545f4a548eb847b0734a3b6d0325a,
+    type: 3}
+  m_PrefabInstance: {fileID: 5451903224101397424}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &233482146
 GameObject:
   m_ObjectHideFlags: 0
@@ -28837,6 +28843,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81877ef4ab08b574f93bf1a3b7c7ae9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &880600225 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8478912549318932163, guid: f6e545f4a548eb847b0734a3b6d0325a,
+    type: 3}
+  m_PrefabInstance: {fileID: 5451903224101397424}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e027faf4e6b37f4b90fec29d1605e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!43 &913362024
@@ -77148,6 +77166,16 @@ PrefabInstance:
       propertyPath: playerAnimation
       value: 
       objectReference: {fileID: 1794660943}
+    - target: {fileID: 3159589302414051804, guid: f6e545f4a548eb847b0734a3b6d0325a,
+        type: 3}
+      propertyPath: playerState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3159589302414051804, guid: f6e545f4a548eb847b0734a3b6d0325a,
+        type: 3}
+      propertyPath: playerBehaviour
+      value: 
+      objectReference: {fileID: 880600225}
     - target: {fileID: 4171885913066461811, guid: f6e545f4a548eb847b0734a3b6d0325a,
         type: 3}
       propertyPath: currentState
@@ -77193,12 +77221,32 @@ PrefabInstance:
       propertyPath: PlayAnimation.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4801499564092659358, guid: f6e545f4a548eb847b0734a3b6d0325a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4801499564092659358, guid: f6e545f4a548eb847b0734a3b6d0325a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4801499564092659358, guid: f6e545f4a548eb847b0734a3b6d0325a,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4910311147888340325, guid: f6e545f4a548eb847b0734a3b6d0325a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4996937039923851411, guid: f6e545f4a548eb847b0734a3b6d0325a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5325940619906894884, guid: f6e545f4a548eb847b0734a3b6d0325a,
         type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -77268,6 +77316,11 @@ PrefabInstance:
       propertyPath: MakeShot.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8478912549318932163, guid: f6e545f4a548eb847b0734a3b6d0325a,
+        type: 3}
+      propertyPath: sword
+      value: 
+      objectReference: {fileID: 226462044}
     - target: {fileID: 9090095569707775520, guid: f6e545f4a548eb847b0734a3b6d0325a,
         type: 3}
       propertyPath: playerAnimation

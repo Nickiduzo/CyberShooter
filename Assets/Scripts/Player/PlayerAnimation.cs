@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,9 +7,8 @@ public class PlayerAnimation : MonoBehaviour
     public UnityEvent ActivateAttack;
     public UnityEvent DeactivateAttack;
 
-
     [SerializeField] private Animator anim;
-
+    [SerializeField] private PlayerBehaviour playerBehaviour;
     [SerializeField] private PlayerSwordAttack playerSwordAttack;
 
     private float x;
@@ -27,6 +27,7 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetBool("Grounded", isGrounded);
         Dance();
+        StartMoving();
         MoveBehaviour();
         hitCooldown -= Time.deltaTime;
     }
@@ -54,7 +55,7 @@ public class PlayerAnimation : MonoBehaviour
     }
     private void Dance()
     {
-        if (Input.GetKeyDown(KeyCode.G) && x == 0 && y == 0)
+        if (Input.GetKeyDown(KeyCode.G) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
         {
             anim.SetTrigger("Dance");
             AudioManager.instanse.Play("Polskaya");
@@ -83,6 +84,22 @@ public class PlayerAnimation : MonoBehaviour
                 case 4:
                     SwordChargeDoubleAttack();
                     hitCooldown = 2f;
+                    break;
+                case 5:
+                    SwordAttack();
+                    hitCooldown = 2f;
+                    break;
+                case 6:
+                    SwordDoubleAttack();
+                    hitCooldown = 3f;
+                    break;
+                case 7:
+                    SwordChargeAttack();
+                    hitCooldown = 3f;
+                    break;
+                case 8:
+                    SwordChargeDoubleAttack();
+                    hitCooldown = 4f;
                     break;
             }
         }
@@ -133,6 +150,19 @@ public class PlayerAnimation : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
+        }
+    }
+
+    private void StartMoving()
+    {
+        if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            anim.SetBool("isMove", true);
+        }
+
+        if(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+        {
+            anim.SetBool("isMove", false);
         }
     }
 }
