@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviour
     private float verticalInput;
 
     private Rigidbody rb;
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;

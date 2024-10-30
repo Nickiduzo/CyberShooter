@@ -4,48 +4,41 @@ using UnityEngine.Events;
 public class PlayerJump : MonoBehaviour
 {
     [SerializeField] private float jumpForce = 3f;
+    [SerializeField] private PlayerAnimation playerAnimation;
 
     public UnityEvent OnJump;
 
     private bool isGrounded = false;
 
     private Rigidbody rb;
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         Jump();
     }
 
     private void Jump()
     {
-        if(Input.GetKey(KeyCode.Space) && isGrounded)
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
-            OnJump?.Invoke();
+            playerAnimation.Jump();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") ||
-            collision.gameObject.CompareTag("Builidng"))
+        if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
         }
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building"))
-        {
-            isGrounded = true;
-        }
-    }
 
     private void OnCollisionExit(Collision collision)
     {

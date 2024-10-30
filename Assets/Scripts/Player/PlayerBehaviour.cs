@@ -8,7 +8,7 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private GameObject[] swords;
     [SerializeField] private GameObject[] pistols;
 
-    private void Start()
+    private void Awake()
     {
         SetPlayerState(PlayerState.Empty);
     }

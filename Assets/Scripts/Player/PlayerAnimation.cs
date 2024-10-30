@@ -1,33 +1,40 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    public UnityEvent ActivateAttack;
+    public UnityEvent DeactivateAttack;
+
+
     [SerializeField] private Animator anim;
-    
-    private bool isMoving;
-    private bool isRuning;
+
+    [SerializeField] private PlayerSwordAttack playerSwordAttack;
 
     private float x;
     private float y;
 
-    private bool isGrounded = false;
-    private void Start()
+    private bool isGrounded;
+
+    private float hitCooldown;
+    private void Awake()
     {
         InitializeListeners();
+        hitCooldown = 1.5f;
     }
 
     private void Update()
     {
         anim.SetBool("Grounded", isGrounded);
-
         Dance();
         MoveBehaviour();
+        hitCooldown -= Time.deltaTime;
     }
-
     private void MoveBehaviour()
     {
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
+
         if(y >= 0.6f && !Input.GetKey(KeyCode.LeftShift))
         {
             y = 0.6f;
@@ -37,66 +44,47 @@ public class PlayerAnimation : MonoBehaviour
             y = 1f;
         }
 
-
         anim.SetFloat("x", x);
         anim.SetFloat("y", y);
-
     }
 
     private void InitializeListeners()
     {
-        PlayerJump playerJump = GetComponent<PlayerJump>();
-        if(playerJump != null)
-        {
-            playerJump.OnJump.AddListener(PlayJumpAnimation);
-        }
-
-        PlayerSwordAttack playerSword = GetComponent<PlayerSwordAttack>();
-        if(playerSword != null)
-        {
-            playerSword.PlayAnimation.AddListener(DetectSwordAnimation);
-        }
-
-        PlayerRifleShot playerRifle = GetComponent<PlayerRifleShot>();
-        if(playerRifle != null )
-        {
-            playerRifle.MakeShot.AddListener(ShotAnimation);
-        }
+        playerSwordAttack.PlayAnimation.AddListener(DetectSwordAnimation);
     }
-
-    private void PlayJumpAnimation()
-    {
-        anim.SetBool("isJump", true);
-    }
-
     private void Dance()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && x == 0 && y == 0)
         {
             anim.SetTrigger("Dance");
             AudioManager.instanse.Play("Polskaya");
         }
     }
 
-    private void ShotAnimation()
+    public void Jump() => anim.SetTrigger("isJump");
+    public void DetectSwordAnimation(int animationIndex)
     {
-        anim.SetTrigger("isShot");
-    }
-
-    private void DetectSwordAnimation(int animationIndex)
-    {
-        switch (animationIndex)
+        if (hitCooldown <= 0)
         {
-            case 1:SwordAttack();
-                break;
-            case 2:SwordDoubleAttack();
-                break;
-            case 3:SwordChargeAttack();
-                break;
-            case 4:SwordChargeDoubleAttack();
-                break;
-            default: print("Ты лох");
-                break;
+            switch (animationIndex)
+            {
+                case 1:
+                    SwordAttack();
+                    hitCooldown = 1f;
+                    break;
+                case 2:
+                    SwordDoubleAttack();
+                    hitCooldown = 1.4f;
+                    break;
+                case 3:
+                    SwordChargeAttack();
+                    hitCooldown = 1.8f;
+                    break;
+                case 4:
+                    SwordChargeDoubleAttack();
+                    hitCooldown = 2f;
+                    break;
+            }
         }
     }
     private void SwordAttack()
@@ -118,23 +106,28 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetTrigger("isSwordChargeDouble");
     }
+    public void SwordAttackOn()
+    {
+        ActivateAttack?.Invoke();
+    }
+
+    public void SwordAttackOff()
+    {
+        DeactivateAttack?.Invoke();
+    }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building"))
+        if (collision.gameObject.CompareTag("Ground") 
+            || collision.gameObject.CompareTag("Building"))
         {
             isGrounded = true;
-            anim.SetBool("isJump", false);
         }
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Building"))
-        {
-            isGrounded = true;
-        }
+        if (collision.gameObject.CompareTag("Ground")) isGrounded = true;  
     }
-
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
