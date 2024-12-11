@@ -7,6 +7,8 @@ public class Sword : MonoBehaviour
 
     public bool canDamage = false;
 
+    public int swordDamage = 25;
+
     [SerializeField] private PlayerAnimation playerAnimation;
     private void Start()
     {
@@ -20,7 +22,7 @@ public class Sword : MonoBehaviour
             if(other.gameObject.CompareTag("Enemy"))
             {
                 AudioManager.instanse.Play("HitOnEnemy");
-                OnHit.Invoke(25);
+                OnHit.Invoke(swordDamage);
             }
         }
     }

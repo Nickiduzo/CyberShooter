@@ -1,12 +1,9 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class PlayerJump : MonoBehaviour
 {
     [SerializeField] private float jumpForce = 3f;
     [SerializeField] private PlayerAnimation playerAnimation;
-
-    public UnityEvent OnJump;
 
     private bool isGrounded = false;
 

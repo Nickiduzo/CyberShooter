@@ -10,24 +10,20 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        SetPlayerState(PlayerState.Empty);
+        EmptyHandler();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SetPlayerState(PlayerState.TwoSwords);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SetPlayerState(PlayerState.Pistols);
-        }
-        else if(Input.GetKeyDown(KeyCode.Alpha3))
-        {
             SetPlayerState(PlayerState.Empty);
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha4))
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SetPlayerState(PlayerState.TwoSwords);
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha3))
         {
             SetPlayerState(PlayerState.Sword);
         }
@@ -39,24 +35,46 @@ public class PlayerBehaviour : MonoBehaviour
         animator.SetLayerWeight(0, 0);
         animator.SetLayerWeight(1, 0);
         animator.SetLayerWeight(2, 0);
+        animator.SetLayerWeight(3, 0);
 
         SwitchOffAll();
 
         switch (newState)
         {
-            case PlayerState.TwoSwords:
-                animator.SetLayerWeight(2,1);
-                SwitchSwords(true);
-                break;
             case PlayerState.Empty:
-                animator.SetLayerWeight(0, 1);
+                EmptyHandler();
                 SwitchOffAll();
                 break;
+            case PlayerState.TwoSwords:
+                SwordsHandler();
+                SwitchSwords(true);
+                break;
             case PlayerState.Sword:
-                animator.SetLayerWeight(2, 1);
+                SwordHandler();
                 SwitchSword(true);
                 break;
         }
+    }
+
+    private void EmptyHandler()
+    {
+        currentState = PlayerState.Empty;
+
+        animator.SetLayerWeight(1, 1);
+
+        animator.SetLayerWeight(0, 0);
+        animator.SetLayerWeight(2, 0);
+        animator.SetLayerWeight(3, 0);
+    }
+
+    private void SwordHandler()
+    {
+        animator.SetLayerWeight(3, 1);
+    }
+
+    private void SwordsHandler()
+    {
+        animator.SetLayerWeight(2, 1);
     }
 
     private void SwitchOffAll()

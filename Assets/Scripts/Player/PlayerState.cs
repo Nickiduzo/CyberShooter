@@ -1,7 +1,6 @@
 public enum PlayerState
 {
-    Pistols = 1,
+    Empty,
     TwoSwords,
     Sword,
-    Empty
 }

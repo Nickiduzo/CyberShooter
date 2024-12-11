@@ -4,13 +4,12 @@ using UnityEngine.Events;
 [RequireComponent(typeof(PlayerBehaviour))]
 public class PlayerSwordAttack : MonoBehaviour
 {
-    [SerializeField] private PlayerState currentState;
-
     [SerializeField] private PlayerBehaviour playerBehaviour;
+
+    private PlayerState currentState;
 
     public UnityEvent<int> PlayAnimation;
 
-    public bool isAttack;
     private void Update()
     {
         currentState = playerBehaviour.currentState;
