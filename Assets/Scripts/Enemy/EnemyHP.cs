@@ -10,12 +10,15 @@ public class EnemyHP : MonoBehaviour
     [SerializeField] private Sword leftSword;
     [SerializeField] private Sword rightSword;
 
+    [SerializeField] private Sword bigSword;
+
     private void Start()
     {
         hp = maxHp;
 
         leftSword.OnHit.AddListener(DecreaseHp);
         rightSword.OnHit.AddListener(DecreaseHp);
+        bigSword.OnHit.AddListener(DecreaseHp);
     }
 
     public void DecreaseHp(int damage)

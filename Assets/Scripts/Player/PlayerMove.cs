@@ -5,6 +5,8 @@ public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransform;
 
+    [SerializeField] private PlayerAttackTimer attackTimer;
+
     [SerializeField] private float mouseSensitivity = 100f;
     [SerializeField] private float lookLimit = 85f;
 
@@ -21,6 +23,8 @@ public class PlayerMove : MonoBehaviour
 
     private float timerOfSpeedRune = 0f;
 
+    [SerializeField] private bool isKick = false;
+
     private Rigidbody rb;
     private void Awake()
     {
@@ -32,6 +36,8 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        isKick = attackTimer.GetKick();
+
         HandleInput();
         RotatePlayer();
 
@@ -40,13 +46,16 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        if(!isKick)
+        {
+            Move();
+        }
     }
 
     private void HandleInput()
     {
         horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        verticalInput = Input.GetAxis("Vertical");    
     }
 
     private void IncreaseSpeed()

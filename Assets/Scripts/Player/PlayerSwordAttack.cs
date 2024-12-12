@@ -21,7 +21,7 @@ public class PlayerSwordAttack : MonoBehaviour
         {
             ChargeAttack();
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(1))
+        else if (Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(1))
         {
             ChargeSprintAttack();
         }
