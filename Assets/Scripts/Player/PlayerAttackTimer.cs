@@ -8,14 +8,20 @@ public class PlayerAttackTimer : MonoBehaviour
     [Header("Two swords")]
     [SerializeField][Range(0,2f)] private float swordsAttack;
     [SerializeField][Range(0,2f)] private float swordsDoubleAttack;
-    [SerializeField][Range(0,2f)] private float swordsChargeAttack;
-    [SerializeField][Range(0,2f)] private float swordsDChargeAttack;
+    [SerializeField][Range(0,3.5f)] private float swordsChargeAttack;
+    [SerializeField][Range(0,3.5f)] private float swordsDChargeAttack;
+
+    [Header("Two Fast Swords")]
+    [SerializeField][Range(0, 3f)] private float fastAttack;
+    [SerializeField][Range(0, 3f)] private float doubleAttack;
+    [SerializeField][Range(0, 3f)] private float chargeAttack;
+    [SerializeField][Range(0, 3f)] private float dChargeAttack;
 
     [Header("One sword")]
-    [SerializeField][Range(0, 5f)] private float swordAttack;
-    [SerializeField][Range(0, 5f)] private float swordHard;
-    [SerializeField][Range(0, 5f)] private float swordChargeAttack;
-    [SerializeField][Range(0, 5f)] private float swordJumpAttack;
+    [SerializeField][Range(0, 7.5f)] private float swordAttack;
+    [SerializeField][Range(0, 7.5f)] private float swordHard;
+    [SerializeField][Range(0, 10f)] private float swordChargeAttack;
+    [SerializeField][Range(0, 10f)] private float swordJumpAttack;
 
     private float currentTimer;
 
@@ -97,6 +103,34 @@ public class PlayerAttackTimer : MonoBehaviour
             if(Input.GetMouseButtonDown(1))
             {
                 currentTimer = swordHard;
+            }
+        }
+
+        if(playerState == PlayerState.FastSwords)
+        {
+            isKick = true;
+
+            if(Input.GetKeyDown(KeyCode.W))
+            {
+                if(Input.GetMouseButtonDown(0))
+                {
+                    currentTimer = chargeAttack;
+                }
+
+                if(Input.GetMouseButtonDown(1))
+                {
+                    currentTimer = dChargeAttack;
+                }
+            }
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                currentTimer = fastAttack;
+            }
+
+            if(Input.GetMouseButtonDown(1))
+            {
+                currentTimer = doubleAttack;
             }
         }
     }

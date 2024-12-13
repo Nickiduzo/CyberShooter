@@ -7,6 +7,8 @@ public class PlayerJump : MonoBehaviour
 
     private bool isGrounded = false;
 
+    private float jumpCoolDown;
+
     private Rigidbody rb;
     private void Awake()
     {
@@ -16,11 +18,13 @@ public class PlayerJump : MonoBehaviour
     private void Update()
     {
         Jump();
+
+        if(jumpCoolDown > 0) jumpCoolDown -= Time.deltaTime;
     }
 
     private void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded && jumpCoolDown <= 0)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
@@ -33,6 +37,7 @@ public class PlayerJump : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+            jumpCoolDown = 1f;
         }
     }
 

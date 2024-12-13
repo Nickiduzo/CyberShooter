@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using UnityEngine.Events;
 
 public class PlayerAnimation : MonoBehaviour
@@ -35,17 +36,19 @@ public class PlayerAnimation : MonoBehaviour
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
 
-        if(y >= 0.6f && !Input.GetKey(KeyCode.LeftShift))
+        float speedFactor = 0.1f;
+
+        if(Input.GetKey(KeyCode.LeftAlt))
         {
-            y = 0.6f;
+            speedFactor = 0.6f;
         }
-        else if(y == 0.6f && Input.GetKey(KeyCode.LeftShift))
+        else if(Input.GetKey(KeyCode.LeftShift))
         {
-            y = 1f;
+            speedFactor = 1f;
         }
 
-        anim.SetFloat("x", x);
-        anim.SetFloat("y", y);
+        anim.SetFloat("x", x * speedFactor);
+        anim.SetFloat("y", y * speedFactor);
     }
 
     private void InitializeListeners()

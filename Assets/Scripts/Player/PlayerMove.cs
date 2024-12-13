@@ -11,10 +11,12 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float lookLimit = 85f;
 
     [SerializeField] private float walkSpeed = 3f;
-    [SerializeField] private float sprintSpeed = 6f;
+    [SerializeField] private float runSpeed = 6f;
+    [SerializeField] private float sprintSpeed = 9f;
 
-    private float walkRuneSpeed = 6f;
-    private float sprintRuneSpeed = 12f;
+    private float walkRuneSpeed = 5f;
+    private float runRuneSpeed = 10f;
+    private float sprintRuneSpeed = 15f;
 
     private float verticalLookRotation = 0f;
 
@@ -63,6 +65,7 @@ public class PlayerMove : MonoBehaviour
         timerOfSpeedRune = 10;
 
         sprintSpeed = sprintRuneSpeed;
+        runSpeed = runRuneSpeed;
         walkSpeed = walkRuneSpeed;
     }
 
@@ -70,7 +73,8 @@ public class PlayerMove : MonoBehaviour
     {
         if (timerOfSpeedRune <= 0)
         {
-            sprintSpeed = 6f;
+            sprintSpeed = 9f;
+            runSpeed = 6f;
             walkSpeed = 3f;
         }
         else
@@ -81,7 +85,19 @@ public class PlayerMove : MonoBehaviour
 
     private void Move()
     {
-        float speed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+        //float speed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+        float speed = walkSpeed;
+        
+        if(Input.GetKey(KeyCode.LeftAlt))
+        {
+            speed = runSpeed;
+        }
+        else if(Input.GetKey(KeyCode.LeftShift))
+        {
+            speed = sprintSpeed;
+        }
+
+
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
 
         Vector3 moveDirection = transform.TransformDirection(direction) * speed * Time.fixedDeltaTime;

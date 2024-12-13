@@ -5,7 +5,11 @@ public class PlayerBehaviour : MonoBehaviour
     [HideInInspector] public PlayerState currentState;
     
     [SerializeField] private Animator animator;
+
+    [SerializeField] private GameObject[] fastSwords;
+
     [SerializeField] private GameObject[] swords;
+    
     [SerializeField] private GameObject sword;
 
     private void Awake()
@@ -19,11 +23,18 @@ public class PlayerBehaviour : MonoBehaviour
         {
             SetPlayerState(PlayerState.Empty);
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        
+        if(Input.GetKeyDown(KeyCode.Alpha2))
         {
             SetPlayerState(PlayerState.TwoSwords);
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha3))
+        
+        if(Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SetPlayerState(PlayerState.FastSwords);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Alpha4))
         {
             SetPlayerState(PlayerState.Sword);
         }
@@ -36,6 +47,7 @@ public class PlayerBehaviour : MonoBehaviour
         animator.SetLayerWeight(1, 0);
         animator.SetLayerWeight(2, 0);
         animator.SetLayerWeight(3, 0);
+        animator.SetLayerWeight(4, 0);
 
         SwitchOffAll();
 
@@ -53,6 +65,10 @@ public class PlayerBehaviour : MonoBehaviour
                 SwordHandler();
                 SwitchSword(true);
                 break;
+            case PlayerState.FastSwords:
+                FastSwordsHandler();
+                SwitchFastSwords(true);
+                break;
         }
     }
 
@@ -65,6 +81,7 @@ public class PlayerBehaviour : MonoBehaviour
         animator.SetLayerWeight(0, 0);
         animator.SetLayerWeight(2, 0);
         animator.SetLayerWeight(3, 0);
+        animator.SetLayerWeight(4, 0);
     }
 
     private void SwordHandler()
@@ -77,10 +94,16 @@ public class PlayerBehaviour : MonoBehaviour
         animator.SetLayerWeight(2, 1);
     }
 
+    private void FastSwordsHandler()
+    {
+        animator.SetLayerWeight(4, 1);
+    }
+
     private void SwitchOffAll()
     {
         SwitchSwords(false);
         SwitchSword(false);
+        SwitchFastSwords(false);
     }
 
     private void SwitchSword(bool activate)
@@ -94,5 +117,11 @@ public class PlayerBehaviour : MonoBehaviour
         {
             swords[i].SetActive(activate);
         }
+    }
+
+    private void SwitchFastSwords(bool activate)
+    {
+        for(int i = 0; i < fastSwords.Length;i++)
+            fastSwords[i].SetActive(activate);
     }
 }

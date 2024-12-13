@@ -140118,15 +140118,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.6333333
-    functionName: MakeSword
+  - time: 1.7666667
+    functionName: SwordAttackOn
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.7666667
-    functionName: SwordAttackOn
+  - time: 1.8333334
+    functionName: MakeSword
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

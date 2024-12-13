@@ -10,6 +10,9 @@ public class EnemyHP : MonoBehaviour
     [SerializeField] private Sword leftSword;
     [SerializeField] private Sword rightSword;
 
+    [SerializeField] private Sword fastLeftSword;
+    [SerializeField] private Sword fastRightSword;
+
     [SerializeField] private Sword bigSword;
 
     private void Start()
@@ -18,12 +21,16 @@ public class EnemyHP : MonoBehaviour
 
         leftSword.OnHit.AddListener(DecreaseHp);
         rightSword.OnHit.AddListener(DecreaseHp);
+
+        fastLeftSword.OnHit.AddListener(DecreaseHp);
+        fastRightSword.OnHit.AddListener(DecreaseHp);
+
         bigSword.OnHit.AddListener(DecreaseHp);
     }
 
     public void DecreaseHp(int damage)
     {
-        if(hp > minHp)
+        if(hp >= minHp)
         {
             hp -= damage;
             print(hp + " total health");

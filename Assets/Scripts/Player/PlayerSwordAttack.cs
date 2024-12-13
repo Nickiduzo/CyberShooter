@@ -37,7 +37,7 @@ public class PlayerSwordAttack : MonoBehaviour
 
     private void Attack()
     {
-        if (currentState == PlayerState.TwoSwords)
+        if (currentState == PlayerState.TwoSwords || currentState == PlayerState.FastSwords)
         {
             PlayAnimation?.Invoke(1);
         }
@@ -50,7 +50,7 @@ public class PlayerSwordAttack : MonoBehaviour
     
     private void DoubleAttack()
     {
-        if(currentState == PlayerState.TwoSwords)
+        if(currentState == PlayerState.TwoSwords || currentState == PlayerState.FastSwords)
         {
             PlayAnimation?.Invoke(2);
         }
@@ -63,7 +63,7 @@ public class PlayerSwordAttack : MonoBehaviour
 
     private void ChargeAttack()
     {
-        if(currentState == PlayerState.TwoSwords)
+        if(currentState == PlayerState.TwoSwords || currentState == PlayerState.FastSwords)
         {
             PlayAnimation.Invoke(3);
         }
@@ -76,7 +76,7 @@ public class PlayerSwordAttack : MonoBehaviour
 
     private void ChargeSprintAttack()
     {
-        if (currentState == PlayerState.TwoSwords)
+        if (currentState == PlayerState.TwoSwords || currentState == PlayerState.FastSwords)
         {
             PlayAnimation.Invoke(4);
         }
