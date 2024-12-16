@@ -85,14 +85,14 @@ public class PlayerMove : MonoBehaviour
 
     private void Move()
     {
-        //float speed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
         float speed = walkSpeed;
         
         if(Input.GetKey(KeyCode.LeftAlt))
         {
             speed = runSpeed;
         }
-        else if(Input.GetKey(KeyCode.LeftShift))
+        
+        if(Input.GetKey(KeyCode.LeftShift))
         {
             speed = sprintSpeed;
         }
