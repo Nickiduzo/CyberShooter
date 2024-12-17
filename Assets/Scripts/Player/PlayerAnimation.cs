@@ -62,6 +62,18 @@ public class PlayerAnimation : MonoBehaviour
             anim.SetTrigger("Dance");
             AudioManager.instanse.Play("Polskaya");
         }
+
+        if(Input.GetKeyDown(KeyCode.H) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
+        {
+            anim.SetTrigger("Nyan");
+            AudioManager.instanse.Play("Nyan");
+        }
+
+        if(Input.GetKeyDown(KeyCode.J) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
+        {
+            anim.SetTrigger("Best");
+            AudioManager.instanse.Play("Best");
+        }
     }
 
     public void Jump() => anim.SetTrigger("isJump");
