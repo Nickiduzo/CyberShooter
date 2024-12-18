@@ -1,7 +1,8 @@
+using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent (typeof(PlayerBehaviour))]
-public class PlayerAttackTimer : MonoBehaviour
+public class PlayerAttackTimer : NetworkBehaviour
 {
     [SerializeField] private PlayerBehaviour playerBehaviour;
 
@@ -35,6 +36,8 @@ public class PlayerAttackTimer : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         SetState();
         HandlerAttack();
 

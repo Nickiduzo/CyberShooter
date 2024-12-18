@@ -1,8 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(PlayerBehaviour))]
-public class PlayerSwordAttack : MonoBehaviour
+public class PlayerSwordAttack : NetworkBehaviour
 {
     [SerializeField] private PlayerBehaviour playerBehaviour;
 
@@ -12,6 +13,8 @@ public class PlayerSwordAttack : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         currentState = playerBehaviour.currentState;
         HandlerAnimation();
     }

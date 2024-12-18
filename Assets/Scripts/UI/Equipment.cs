@@ -7,6 +7,11 @@ public class Equipment : MonoBehaviour
 
     [SerializeField] private PlayerBehaviour playerBehaviour;
 
+    private void Awake()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if(player != null) playerBehaviour = player.GetComponent<PlayerBehaviour>();
+    }
     private void Update()
     {
         ChangeIcon();

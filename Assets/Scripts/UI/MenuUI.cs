@@ -7,7 +7,6 @@ public class MenuUI : NetworkBehaviour
 {
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
-    [SerializeField] private Button serverButton;
 
     private void Awake()
     {
@@ -19,19 +18,12 @@ public class MenuUI : NetworkBehaviour
         hostButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartHost();
-            LaunchGame(1);
+            NetworkManager.Singleton.SceneManager.LoadScene("Arena", LoadSceneMode.Single);
         });
 
         clientButton.onClick.AddListener(() =>
         {
-            NetworkManager.Singleton.StartClient();
-            LaunchGame(1);
-        });
-
-        serverButton.onClick.AddListener(() =>
-        {
-            LaunchGame(1);
-            NetworkManager.Singleton.StartServer();
+            NetworkManager.Singleton.StartClient();                    
         });
     }
 
@@ -39,6 +31,10 @@ public class MenuUI : NetworkBehaviour
 
     public void ExitGame()
     {
-        print("Exit from game");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

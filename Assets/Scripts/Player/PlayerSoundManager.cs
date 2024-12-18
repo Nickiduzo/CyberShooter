@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerSoundManager : MonoBehaviour
+public class PlayerSoundManager : NetworkBehaviour
 {
     public void MakeSlowStep() => AudioManager.instanse.PlayStep();
 

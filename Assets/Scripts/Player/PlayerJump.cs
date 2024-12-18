@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerJump : MonoBehaviour
+public class PlayerJump : NetworkBehaviour
 {
     [SerializeField] private float jumpForce = 3f;
     [SerializeField] private PlayerAnimation playerAnimation;
@@ -17,6 +18,8 @@ public class PlayerJump : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         Jump();
 
         if(jumpCoolDown > 0) jumpCoolDown -= Time.deltaTime;

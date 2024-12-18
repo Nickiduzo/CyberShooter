@@ -1,7 +1,7 @@
-using System;
-using UnityEditor;
+using Unity.Netcode;
 using UnityEngine;
-public class PlayerMove : MonoBehaviour
+
+public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private Transform cameraTransform;
 
@@ -27,28 +27,56 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private bool isKick = false;
 
+    [SerializeField] private NetworkVariable<Vector3> playerPos = new NetworkVariable<Vector3>();
+
     private Rigidbody rb;
+    private Vector3 lastPosition;
+
     private void Awake()
     {
+        Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
 
         Rune.IncreaseSpeed += IncreaseSpeed;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        if(IsHost)
+        {
+            playerPos.Value = transform.position;
+            lastPosition = transform.position;
+        }
+    }
+
     private void Update()
     {
+        if (IsOwner)
+        {
+            HandleInput();
+            RotatePlayer();
+            RuneHandler();
+        }
+
+        if(IsHost && IsSpawned)
+        {
+            if(transform.position != lastPosition)
+            {
+                playerPos.Value = transform.position;
+                lastPosition = transform.position;
+            }
+        }
+        else if (!IsOwner)
+        {
+            transform.position = playerPos.Value;
+        }
+
         isKick = attackTimer.GetKick();
-
-        HandleInput();
-        RotatePlayer();
-
-        RuneHandler();
     }
 
     private void FixedUpdate()
     {
-        if(!isKick)
+        if(!isKick && IsOwner)
         {
             Move();
         }

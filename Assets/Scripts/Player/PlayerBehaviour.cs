@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerBehaviour : MonoBehaviour
+public class PlayerBehaviour : NetworkBehaviour
 {
     [HideInInspector] public PlayerState currentState;
     
@@ -19,6 +20,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SetPlayerState(PlayerState.Empty);

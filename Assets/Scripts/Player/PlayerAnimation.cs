@@ -1,8 +1,9 @@
 using UnityEngine;
 using System;
 using UnityEngine.Events;
+using Unity.Netcode;
 
-public class PlayerAnimation : MonoBehaviour
+public class PlayerAnimation : NetworkBehaviour
 {
     public UnityEvent ActivateAttack;
     public UnityEvent DeactivateAttack;
@@ -25,6 +26,8 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         anim.SetBool("Grounded", isGrounded);
         Dance();
         StartMoving();
@@ -85,35 +88,35 @@ public class PlayerAnimation : MonoBehaviour
             {
                 case 1:
                     SwordAttack();
-                    hitCooldown = 1f;
+                    //hitCooldown = 1f;
                     break;
                 case 2:
                     SwordDoubleAttack();
-                    hitCooldown = 1.4f;
+                    //hitCooldown = 1.4f;
                     break;
                 case 3:
                     SwordChargeAttack();
-                    hitCooldown = 1.8f;
+                    //hitCooldown = 1.8f;
                     break;
                 case 4:
                     SwordChargeDoubleAttack();
-                    hitCooldown = 2f;
+                    //hitCooldown = 2f;
                     break;
                 case 5:
                     SwordAttack();
-                    hitCooldown = 2f;
+                    //hitCooldown = 2f;
                     break;
                 case 6:
                     SwordDoubleAttack();
-                    hitCooldown = 3f;
+                    //hitCooldown = 3f;
                     break;
                 case 7:
                     SwordChargeAttack();
-                    hitCooldown = 3f;
+                    //hitCooldown = 3f;
                     break;
                 case 8:
                     SwordChargeDoubleAttack();
-                    hitCooldown = 4f;
+                    //hitCooldown = 4f;
                     break;
             }
         }

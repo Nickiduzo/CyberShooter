@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : NetworkBehaviour
 {
     public static AudioManager instanse;
 
