@@ -18,6 +18,10 @@ public class PlayerAnimation : NetworkBehaviour
     private bool isGrounded;
 
     private float hitCooldown;
+
+    private NetworkVariable<float> networkX = new NetworkVariable<float>();
+    private NetworkVariable<float> networkY = new NetworkVariable<float>();
+    private NetworkVariable<bool> networkIsMoving = new NetworkVariable<bool>();
     private void Awake()
     {
         InitializeListeners();
@@ -33,7 +37,29 @@ public class PlayerAnimation : NetworkBehaviour
         StartMoving();
         MoveBehaviour();
         hitCooldown -= Time.deltaTime;
+
+        networkX.Value = x;
+        networkY.Value = y;
+        networkIsMoving.Value = (x != 0 || y != 0);
     }
+
+    [ServerRpc]
+    private void SetAnimServerRpc(float x, float y, float speedFactor)
+    {
+        SetAnimClientRpc(x, y, speedFactor);
+    }
+
+    [ClientRpc]
+    private void SetAnimClientRpc(float x, float y, float speedFactor)
+    {
+        if(!IsOwner)
+        {
+            anim.SetFloat("x", x * speedFactor);
+            anim.SetFloat("y", y * speedFactor);
+        }
+    }
+
+
     private void MoveBehaviour()
     {
         x = Input.GetAxis("Horizontal");
@@ -52,6 +78,8 @@ public class PlayerAnimation : NetworkBehaviour
 
         anim.SetFloat("x", x * speedFactor);
         anim.SetFloat("y", y * speedFactor);
+
+        SetAnimServerRpc(x, y, speedFactor);
     }
 
     private void InitializeListeners()
@@ -63,18 +91,21 @@ public class PlayerAnimation : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.G) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
         {
             anim.SetTrigger("Dance");
+            PerformDanceServerRpc("Dance");
             AudioManager.instanse.Play("Polskaya");
         }
 
         if(Input.GetKeyDown(KeyCode.H) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
         {
             anim.SetTrigger("Nyan");
+            PerformDanceServerRpc("Nyan");
             AudioManager.instanse.Play("Nyan");
         }
 
         if(Input.GetKeyDown(KeyCode.J) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
         {
             anim.SetTrigger("Best");
+            PerformDanceServerRpc("Best");
             AudioManager.instanse.Play("Best");
         }
     }
@@ -88,35 +119,35 @@ public class PlayerAnimation : NetworkBehaviour
             {
                 case 1:
                     SwordAttack();
-                    //hitCooldown = 1f;
+                    hitCooldown = 1f;
                     break;
                 case 2:
                     SwordDoubleAttack();
-                    //hitCooldown = 1.4f;
+                    hitCooldown = 1.4f;
                     break;
                 case 3:
                     SwordChargeAttack();
-                    //hitCooldown = 1.8f;
+                    hitCooldown = 1.8f;
                     break;
                 case 4:
                     SwordChargeDoubleAttack();
-                    //hitCooldown = 2f;
+                    hitCooldown = 2f;
                     break;
                 case 5:
                     SwordAttack();
-                    //hitCooldown = 2f;
+                    hitCooldown = 2f;
                     break;
                 case 6:
                     SwordDoubleAttack();
-                    //hitCooldown = 3f;
+                    hitCooldown = 3f;
                     break;
                 case 7:
                     SwordChargeAttack();
-                    //hitCooldown = 3f;
+                    hitCooldown = 3f;
                     break;
                 case 8:
                     SwordChargeDoubleAttack();
-                    //hitCooldown = 4f;
+                    hitCooldown = 4f;
                     break;
             }
         }
@@ -124,21 +155,25 @@ public class PlayerAnimation : NetworkBehaviour
     private void SwordAttack()
     {
         anim.SetTrigger("isSword");
+        PerformSwordAttackServerRpc("isSword");
     }
 
     private void SwordDoubleAttack()
     {
         anim.SetTrigger("isSwordDouble");
+        PerformSwordAttackServerRpc("isSwordDouble");
     }
 
     private void SwordChargeAttack()
     {
         anim.SetTrigger("isSwordCharge");
+        PerformSwordAttackServerRpc("isSwordCharge");
     }
 
     private void SwordChargeDoubleAttack()
     {
         anim.SetTrigger("isSwordChargeDouble");
+        PerformSwordAttackServerRpc("isSwordChargeDouble");
     }
     public void SwordAttackOn()
     {
@@ -172,14 +207,40 @@ public class PlayerAnimation : NetworkBehaviour
 
     private void StartMoving()
     {
-        if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        if(x != 0 || y != 0)
         {
-            anim.SetBool("isMove", true);
+            anim.SetBool("isMove",true);
         }
-
-        if(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+        else
         {
             anim.SetBool("isMove", false);
         }
+    }
+
+    [ServerRpc]
+    private void PerformSwordAttackServerRpc(string triggerName)
+    {
+        TriggerSwordAttackClientRpc(triggerName);
+    }
+
+    [ClientRpc]
+    private void TriggerSwordAttackClientRpc(string triggerName)
+    {
+        if(!IsOwner)
+        {
+            anim.SetTrigger(triggerName);
+        }
+    }
+
+    [ServerRpc]
+    private void PerformDanceServerRpc(string triggerName)
+    {
+        TriggerDanceClientRpc(triggerName);
+    }
+
+    [ClientRpc]
+    private void TriggerDanceClientRpc(string triggerName)
+    {
+        if (!IsOwner) anim.SetTrigger(triggerName);
     }
 }

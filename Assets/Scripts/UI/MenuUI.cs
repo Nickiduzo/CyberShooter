@@ -3,33 +3,50 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MenuUI : NetworkBehaviour
+public class MenuUI : MonoBehaviour
 {
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
 
-    private void Awake()
-    {
-        Cursor.visible = true;
-    }
+    [SerializeField] private Button exitButton;
 
     private void Start()
     {
-        hostButton.onClick.AddListener(() =>
-        {
-            NetworkManager.Singleton.StartHost();
-            NetworkManager.Singleton.SceneManager.LoadScene("Arena", LoadSceneMode.Single);
-        });
+        Cursor.visible = true;
 
-        clientButton.onClick.AddListener(() =>
-        {
-            NetworkManager.Singleton.StartClient();                    
-        });
+        hostButton.onClick.AddListener(StartHost);
+        clientButton.onClick.AddListener(StartClient);
+
+        exitButton.onClick.AddListener(ExitGame);
     }
 
-    public void LaunchGame(int index) => SceneManager.LoadScene(index);
 
-    public void ExitGame()
+    private void StartHost()
+    {
+        if(NetworkManager.Singleton.IsListening)
+        {
+            Debug.LogWarning("Netcode is already running. Restarting...");
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        if(NetworkManager.Singleton.StartHost())
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("Arena", LoadSceneMode.Single);
+        }
+    }
+
+    private void StartClient()
+    {
+        if(NetworkManager.Singleton.IsListening)
+        {
+            Debug.LogWarning("Network is already running. Restarting...");
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        NetworkManager.Singleton.StartClient();
+    }
+
+    private void ExitGame()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

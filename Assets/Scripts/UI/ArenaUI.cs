@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,10 +9,7 @@ public class ArenaUI : MonoBehaviour
 
     private void Awake()
     {
-        exitButton.onClick.AddListener(() =>
-        {
-            LaunchMenu();
-        });
+        exitButton.onClick.AddListener(ExitFromArena);
     }
 
     private void Update()
@@ -22,5 +20,17 @@ public class ArenaUI : MonoBehaviour
         }
     }
 
-    private void LaunchMenu() => SceneManager.LoadScene(0);
+    private void ExitFromArena()
+    {
+        if(NetworkManager.Singleton.IsHost)
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
+        else if(NetworkManager.Singleton.IsClient)
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        SceneManager.LoadScene("Menu");
+    }
 }

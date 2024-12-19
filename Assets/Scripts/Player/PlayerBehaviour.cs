@@ -4,7 +4,9 @@ using UnityEngine;
 public class PlayerBehaviour : NetworkBehaviour
 {
     [HideInInspector] public PlayerState currentState;
-    
+
+    [HideInInspector] public NetworkVariable<PlayerState> networkState = new NetworkVariable<PlayerState>();
+
     [SerializeField] private Animator animator;
 
     [SerializeField] private GameObject[] fastSwords;
@@ -24,24 +26,35 @@ public class PlayerBehaviour : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SetPlayerState(PlayerState.Empty);
+            SetPlayerStateServerRpc(PlayerState.Empty);
         }
         
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SetPlayerState(PlayerState.TwoSwords);
+            SetPlayerStateServerRpc(PlayerState.TwoSwords);
         }
         
         if(Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SetPlayerState(PlayerState.FastSwords);
+            SetPlayerStateServerRpc(PlayerState.FastSwords);
         }
 
         if(Input.GetKeyDown(KeyCode.Alpha4))
         {
-            SetPlayerState(PlayerState.Sword);
+            SetPlayerStateServerRpc(PlayerState.Sword);
         }
     }
+
+    [ServerRpc]
+    private void SetPlayerStateServerRpc(PlayerState newState)
+    {
+        networkState.Value = newState;
+        SetPlayerStateClientRpc(newState);
+    }
+
+    [ClientRpc]
+    private void SetPlayerStateClientRpc(PlayerState newState) => SetPlayerState(newState);
+
     private void SetPlayerState(PlayerState newState)
     {
         currentState = newState;

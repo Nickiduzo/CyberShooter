@@ -5,23 +5,23 @@ public class Equipment : MonoBehaviour
 {
     [SerializeField] private Image[] images;
 
-    [SerializeField] private PlayerBehaviour playerBehaviour;
-
-    private void Awake()
+    private void Start()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if(player != null) playerBehaviour = player.GetComponent<PlayerBehaviour>();
+        ChangeIcon(PlayerState.Empty);
     }
     private void Update()
     {
-        ChangeIcon();
+        if(Input.GetKeyDown(KeyCode.Alpha1)) ChangeIcon(PlayerState.Empty);
+        if(Input.GetKeyDown(KeyCode.Alpha2)) ChangeIcon(PlayerState.TwoSwords);
+        if(Input.GetKeyDown(KeyCode.Alpha3)) ChangeIcon(PlayerState.FastSwords);
+        if(Input.GetKeyDown(KeyCode.Alpha4)) ChangeIcon(PlayerState.Sword);
     }
 
-    private void ChangeIcon()
+    private void ChangeIcon(PlayerState playerState)
     {
         ResetAllImagesTransparency();
 
-        switch (playerBehaviour.currentState)
+        switch (playerState)
         {
             case PlayerState.Empty:
                 SetImageTransparency(images[0], 0.5f);

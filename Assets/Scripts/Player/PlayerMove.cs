@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Cinemachine.CinemachineVirtualCamera virtualCamera;
 
     [SerializeField] private PlayerAttackTimer attackTimer;
 
@@ -27,56 +28,51 @@ public class PlayerMove : NetworkBehaviour
 
     [SerializeField] private bool isKick = false;
 
-    [SerializeField] private NetworkVariable<Vector3> playerPos = new NetworkVariable<Vector3>();
-
     private Rigidbody rb;
-    private Vector3 lastPosition;
+    private Vector3 movementPosition;
+
+    private NetworkVariable<Vector3> playerPosition = new NetworkVariable<Vector3>(
+            writePerm: NetworkVariableWritePermission.Server);
+
+    private NetworkVariable<Quaternion> playerRotation = new NetworkVariable<Quaternion>(
+        writePerm: NetworkVariableWritePermission.Server);
+
 
     private void Awake()
     {
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
-
-        Rune.IncreaseSpeed += IncreaseSpeed;
     }
 
-    public override void OnNetworkSpawn()
+    private void Start()
     {
-        if(IsHost)
+        if(!IsOwner)
         {
-            playerPos.Value = transform.position;
-            lastPosition = transform.position;
+            virtualCamera.Priority = 0;
+            virtualCamera.gameObject.SetActive(false);
+        }
+        else
+        {
+            virtualCamera.Priority = 10;
+            virtualCamera.gameObject.SetActive(true);
         }
     }
 
     private void Update()
     {
-        if (IsOwner)
-        {
-            HandleInput();
-            RotatePlayer();
-            RuneHandler();
-        }
+        if (!IsOwner) return;
 
-        if(IsHost && IsSpawned)
-        {
-            if(transform.position != lastPosition)
-            {
-                playerPos.Value = transform.position;
-                lastPosition = transform.position;
-            }
-        }
-        else if (!IsOwner)
-        {
-            transform.position = playerPos.Value;
-        }
+        HandleInput();
+        RotatePlayer();
 
         isKick = attackTimer.GetKick();
     }
 
     private void FixedUpdate()
     {
-        if(!isKick && IsOwner)
+        if (!IsOwner) return;
+
+        if(!isKick)
         {
             Move();
         }
@@ -86,6 +82,8 @@ public class PlayerMove : NetworkBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");    
+        
+        movementPosition = new Vector3(horizontalInput, 0,verticalInput).normalized;
     }
 
     private void IncreaseSpeed()
@@ -125,11 +123,10 @@ public class PlayerMove : NetworkBehaviour
             speed = sprintSpeed;
         }
 
-
-        Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
-
-        Vector3 moveDirection = transform.TransformDirection(direction) * speed * Time.fixedDeltaTime;
+        Vector3 moveDirection = transform.TransformDirection(movementPosition) * speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + moveDirection);
+
+        UpdateMovementServerRpc(rb.position, transform.rotation);
     }
 
     private void RotatePlayer()
@@ -144,8 +141,29 @@ public class PlayerMove : NetworkBehaviour
         cameraTransform.localRotation = Quaternion.Euler(verticalLookRotation, 0, 0);
     }
 
-    private void OnDestroy()
+    [ServerRpc]
+    private void UpdateMovementServerRpc(Vector3 newPosition, Quaternion newRotation)
     {
-        Rune.IncreaseSpeed -= IncreaseSpeed;   
+        playerPosition.Value = newPosition;
+        playerRotation.Value = newRotation;
+    }
+
+    [ClientRpc]
+    private  void UpdateMovementClientRpc(Vector3 newPosition, Quaternion newRotation)
+    {
+        if(!IsOwner)
+        {
+            rb.position = newPosition;
+            playerRotation.Value = newRotation;
+        }
+    }
+
+    private void OnNetworkSpawn()
+    {
+        if(!IsOwner)
+        {
+            playerPosition.OnValueChanged += (oldPos, newPos) => rb.position = newPos;
+            playerRotation.OnValueChanged += (oldRot, newRot) => transform.rotation = newRot;
+        }
     }
 }
