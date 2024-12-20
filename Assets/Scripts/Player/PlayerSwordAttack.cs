@@ -9,7 +9,7 @@ public class PlayerSwordAttack : NetworkBehaviour
 
     private PlayerState currentState;
 
-    public UnityEvent<int> PlayAnimation;
+    [HideInInspector] public UnityEvent<int> PlayAnimation;
 
     private void Update()
     {

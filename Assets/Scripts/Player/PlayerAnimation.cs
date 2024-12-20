@@ -1,12 +1,11 @@
 using UnityEngine;
-using System;
 using UnityEngine.Events;
 using Unity.Netcode;
 
 public class PlayerAnimation : NetworkBehaviour
 {
-    public UnityEvent ActivateAttack;
-    public UnityEvent DeactivateAttack;
+    [HideInInspector] public UnityEvent ActivateAttack;
+    [HideInInspector] public UnityEvent DeactivateAttack;
 
     [SerializeField] private Animator anim;
     [SerializeField] private PlayerBehaviour playerBehaviour;
