@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -19,6 +20,12 @@ public class PlayerMove : NetworkBehaviour
 
     private NetworkVariable<Vector3> playerPosition = new NetworkVariable<Vector3>();
 
+    private void Awake()
+    {
+        Cursor.visible = false;
+        rb = GetComponent<Rigidbody>();
+    }
+
     private void FixedUpdate()
     {
         if (!IsOwner) return;
@@ -29,8 +36,6 @@ public class PlayerMove : NetworkBehaviour
         {
             Move();
         }
-
-        rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
 
     private void Move()
@@ -63,5 +68,15 @@ public class PlayerMove : NetworkBehaviour
     private void UpdateMovementServerRpc(Vector3 newPosition)
     {
         playerPosition.Value = newPosition;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            print("SpawnPosition" + rb.position);
+            rb.position = new Vector3(UnityEngine.Random.Range(10, 15), 5, UnityEngine.Random.Range(0, 5));
+            print("LocatedPosition" + rb.position);
+        }
     }
 }

@@ -23,13 +23,13 @@ public class MenuUI : MonoBehaviour
 
     private void StartHost()
     {
-        if(NetworkManager.Singleton.IsListening)
+        if (NetworkManager.Singleton.IsListening)
         {
             Debug.LogWarning("Netcode is already running. Restarting...");
             NetworkManager.Singleton.Shutdown();
         }
 
-        if(NetworkManager.Singleton.StartHost())
+        if (NetworkManager.Singleton.StartHost())
         {
             NetworkManager.Singleton.SceneManager.LoadScene("Arena", LoadSceneMode.Single);
         }
@@ -37,7 +37,7 @@ public class MenuUI : MonoBehaviour
 
     private void StartClient()
     {
-        if(NetworkManager.Singleton.IsListening)
+        if (NetworkManager.Singleton.IsListening)
         {
             Debug.LogWarning("Network is already running. Restarting...");
             NetworkManager.Singleton.Shutdown();

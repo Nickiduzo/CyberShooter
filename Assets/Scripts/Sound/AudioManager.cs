@@ -15,10 +15,7 @@ public class AudioManager : NetworkBehaviour
         {
             instanse = this;
         }
-        else
-        {
-            Destroy(instanse);
-        }
+        DontDestroyOnLoad(gameObject);
         Initialization();
     }
 

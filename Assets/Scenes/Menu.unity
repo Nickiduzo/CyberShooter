@@ -35120,7 +35120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1569189294
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -37264,10 +37264,50 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
         type: 3}
+      propertyPath: LogLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: NetworkConfig.RpcHashSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
       propertyPath: NetworkConfig.PlayerPrefab
       value: 
       objectReference: {fileID: 9090166583303559627, guid: 4366e8c71c3155e45b4c6bdd1b5538b5,
         type: 3}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: NetworkConfig.ForceSamePrefabs
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: NetworkConfig.RecycleNetworkIds
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: NetworkConfig.ConnectionApproval
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: NetworkConfig.EnableSceneManagement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: NetworkConfig.Prefabs.NetworkPrefabsLists.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1764889118594898217, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: NetworkConfig.Prefabs.NetworkPrefabsLists.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4029833566809987576, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -37317,6 +37357,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6662780677881052495, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: m_ProtocolType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6662780677881052495, guid: e920b02b1bb7ff641ba8a56e26e8ec14,
+        type: 3}
+      propertyPath: ConnectionData.ServerListenAddress
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

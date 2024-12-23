@@ -13,32 +13,11 @@ public class CameraController : NetworkBehaviour
 
     private NetworkVariable<Quaternion> playerRotation = new NetworkVariable<Quaternion>();
 
-    public override void OnNetworkSpawn()
-    {
-        InitializeCamera();
-
-        base.OnNetworkSpawn();
-    }
-
     private void Update()
     {
         if (!IsOwner) return;
 
         RotatePlayer();
-    }
-
-    private void InitializeCamera()
-    {
-        if (!IsOwner)
-        {
-            virtualCamera.Priority = 0;
-            virtualCamera.gameObject.SetActive(false);
-        }
-        else
-        {
-            virtualCamera.Priority = 10;
-            virtualCamera.gameObject.SetActive(true);
-        }
     }
 
     private void RotatePlayer()
@@ -59,6 +38,9 @@ public class CameraController : NetworkBehaviour
     [ServerRpc]
     private void UpdateCameraRotationServerRpc(Quaternion newVerticalRotation)
     {
-        playerRotation.Value = newVerticalRotation;
+        if(!IsOwner)
+        {
+            playerRotation.Value = newVerticalRotation;
+        }
     }
 }
