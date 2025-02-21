@@ -10,7 +10,7 @@ public class MenuUI : MonoBehaviour
 
     [SerializeField] private Button exitButton;
 
-    private void Start()
+    private void Awake()
     {
         Cursor.visible = true;
 

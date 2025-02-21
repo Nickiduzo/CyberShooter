@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420036ea61736284196086c2fd70d58b, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: 
+  body: {fileID: 2100000, guid: 06c0bf3f4fa79ad4ca32996dba9a7e3d, type: 2}
+  head: {fileID: 2100000, guid: 4393159061268164a9fe0d9cb617dc9f, type: 2}
+  cables: {fileID: 2100000, guid: 8dd01fbb8d837b845a3bf0a479202459, type: 2}
+  ribs: {fileID: 2100000, guid: d416bd9cab2357240942c7434dc62177, type: 2}
+  bodyGreen: {fileID: 2100000, guid: 61c77d0d638193148887f556cc7aba60, type: 2}
+  headGreen: {fileID: 2100000, guid: 0ea657074a6d089409767d71d6412b4d, type: 2}
+  cablesGreen: {fileID: 2100000, guid: 2601cab993b52454e91063386c34930b, type: 2}
+  ribsGreen: {fileID: 2100000, guid: 4c265877af47b7d448ad0b0c595ea40e, type: 2}
+  bodyRed: {fileID: 2100000, guid: 5ed6de712688901448e818834764e36b, type: 2}
+  headRed: {fileID: 2100000, guid: d29e39232656612499ca22a84e08af83, type: 2}
+  cablesRed: {fileID: 2100000, guid: cf02fe0e8f64ff54085eae8e9f63e7aa, type: 2}
+  ribsRed: {fileID: 2100000, guid: 2aea6b5f43261f64d85076397aa1caf5, type: 2}
+  bodyYellow: {fileID: 2100000, guid: 37b265dc80675c9479d10aef72076c25, type: 2}
+  headYellow: {fileID: 2100000, guid: c128c1d77311c684da9c67e1a0d139d2, type: 2}
+  cablesYellow: {fileID: 2100000, guid: cb848329e4fd10048928b16ccb88cbc5, type: 2}
+  ribsYellow: {fileID: 2100000, guid: 815b49643916c37488da4d0a43ee7c93, type: 2}

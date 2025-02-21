@@ -22,15 +22,10 @@ public class ArenaUI : MonoBehaviour
 
     private void ExitFromArena()
     {
-        if(NetworkManager.Singleton.IsHost)
+        if(NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
         {
             NetworkManager.Singleton.Shutdown();
+            SceneManager.LoadScene("Menu");
         }
-        else if(NetworkManager.Singleton.IsClient)
-        {
-            NetworkManager.Singleton.Shutdown();
-        }
-
-        SceneManager.LoadScene("Menu");
     }
 }

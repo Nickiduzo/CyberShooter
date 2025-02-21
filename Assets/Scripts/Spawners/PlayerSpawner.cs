@@ -1,22 +1,43 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerSpawner : NetworkBehaviour
+public class PlayerSpawner : MonoBehaviour
 {
-    [SerializeField] private Transform[] greenSpawnPositions;
-    [SerializeField] private Transform[] redSpawnPositions;
+    [SerializeField] private Transform[] spawnPositions;
 
-    private void SpawnPlayer(GameObject playerPrefab, ulong clientId)
+    private int nextSpawnIndex = 0;
+
+    private void Start()
     {
-        Transform spawnPoint = greenSpawnPositions[(int)(clientId % (ulong)greenSpawnPositions.Length)];
-        
-        print(spawnPoint);
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+    }
 
-        if (IsServer)
+    private void OnDisable()
+    {
+        if (NetworkManager.Singleton != null)
         {
-            GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
-            player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+        }
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        GameObject playerObject = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.gameObject;
+
+        if (playerObject != null)
+        {
+            if(nextSpawnIndex >= spawnPositions.Length)
+            {
+                nextSpawnIndex = 0;
+            }
+
+            Transform spawnPoint = spawnPositions[nextSpawnIndex++];
+
+            Debug.LogWarning("Spawned player at: " + spawnPoint);
+
+            playerObject.transform.position = spawnPoint.position;
         }
 
+        print("Didn't change player position");
     }
 }

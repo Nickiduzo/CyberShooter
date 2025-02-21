@@ -21,6 +21,7 @@ public class PlayerAnimation : NetworkBehaviour
     private NetworkVariable<float> networkX = new NetworkVariable<float>();
     private NetworkVariable<float> networkY = new NetworkVariable<float>();
     private NetworkVariable<bool> networkIsMoving = new NetworkVariable<bool>();
+    private NetworkVariable<bool> networkJump = new NetworkVariable<bool>();
     private void Awake()
     {
         InitializeListeners();
@@ -36,15 +37,14 @@ public class PlayerAnimation : NetworkBehaviour
         StartMoving();
         MoveBehaviour();
         hitCooldown -= Time.deltaTime;
-
-        networkX.Value = x;
-        networkY.Value = y;
-        networkIsMoving.Value = (x != 0 || y != 0);
     }
 
     [ServerRpc]
     private void SetAnimServerRpc(float x, float y, float speedFactor)
     {
+        networkX.Value = x;
+        networkY.Value = y;
+        networkIsMoving.Value = (x != 0 || y != 0);
         SetAnimClientRpc(x, y, speedFactor);
     }
 
@@ -57,7 +57,6 @@ public class PlayerAnimation : NetworkBehaviour
             anim.SetFloat("y", y * speedFactor);
         }
     }
-
 
     private void MoveBehaviour()
     {
@@ -109,7 +108,20 @@ public class PlayerAnimation : NetworkBehaviour
         }
     }
 
-    public void Jump() => anim.SetTrigger("isJump");
+
+    [ServerRpc]
+    public void JumpServerRpc()
+    {
+        networkJump.Value = true;
+        MakeJumpClientRpc();
+    }
+
+    [ClientRpc]
+    private void MakeJumpClientRpc()
+    {
+        anim.SetTrigger("isJump");
+    }
+
     public void DetectSwordAnimation(int animationIndex)
     {
         if (hitCooldown <= 0)

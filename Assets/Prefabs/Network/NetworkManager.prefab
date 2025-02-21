@@ -48,7 +48,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 6662780677881052495}
-    PlayerPrefab: {fileID: 8119097287563423335, guid: f6e545f4a548eb847b0734a3b6d0325a,
+    PlayerPrefab: {fileID: 9090166583303559627, guid: 4366e8c71c3155e45b4c6bdd1b5538b5,
       type: 3}
     Prefabs:
       NetworkPrefabsLists: []
@@ -69,7 +69,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
 --- !u!114 &6662780677881052495
 MonoBehaviour:
   m_ObjectHideFlags: 0

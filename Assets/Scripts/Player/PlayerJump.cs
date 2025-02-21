@@ -31,7 +31,7 @@ public class PlayerJump : NetworkBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
-            playerAnimation.Jump();
+            playerAnimation.JumpServerRpc();
         }
     }
 

@@ -1,46 +1,44 @@
-using Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 
 public class CameraController : NetworkBehaviour
 {
-    [SerializeField] private Transform cameraTransform;
-    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private Camera playerCamera;
+    private AudioListener audioListener;
 
-    [SerializeField] private float mouseSensitivity = 100f;
-    [SerializeField] private float verticalLookRotation = 0f;
-    [SerializeField] private float lookLimit = 85f;
-
-    private NetworkVariable<Quaternion> playerRotation = new NetworkVariable<Quaternion>();
-
-    private void Update()
+    private void Start()
     {
-        if (!IsOwner) return;
+        audioListener = GetComponent<AudioListener>();
 
-        RotatePlayer();
+        if(IsOwner)
+        {
+            playerCamera.gameObject.SetActive(true);
+            if(audioListener != null)
+            {
+                audioListener.enabled = false;
+            }
+        }
+        else
+        {
+            playerCamera.gameObject.SetActive(false);
+            if(audioListener != null)
+            {
+                audioListener.enabled = false;
+            }
+        }
     }
 
-    private void RotatePlayer()
+    public override void OnNetworkSpawn()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.fixedDeltaTime;
-        transform.Rotate(Vector3.up * mouseX);
-
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.fixedDeltaTime;
-        verticalLookRotation -= mouseY;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -lookLimit, lookLimit);
-
-        cameraTransform.localRotation = Quaternion.Euler(verticalLookRotation, 0, 0);
-
-        UpdateCameraRotationServerRpc(transform.rotation);
-    }
-
-
-    [ServerRpc]
-    private void UpdateCameraRotationServerRpc(Quaternion newVerticalRotation)
-    {
+        base.OnNetworkSpawn();
+        
         if(!IsOwner)
         {
-            playerRotation.Value = newVerticalRotation;
+            playerCamera.gameObject.SetActive(false);
+            if (audioListener != null)
+            {
+                audioListener.enabled = false;
+            }
         }
     }
 }

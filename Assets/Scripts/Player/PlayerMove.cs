@@ -20,7 +20,7 @@ public class PlayerMove : NetworkBehaviour
 
     private NetworkVariable<Vector3> playerPosition = new NetworkVariable<Vector3>();
 
-    private void Awake()
+    private void Start()
     {
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
@@ -72,11 +72,13 @@ public class PlayerMove : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
-        {
-            print("SpawnPosition" + rb.position);
-            rb.position = new Vector3(UnityEngine.Random.Range(10, 15), 5, UnityEngine.Random.Range(0, 5));
-            print("LocatedPosition" + rb.position);
-        }
+        if (!IsOwner) return;
+
+        float randZ = UnityEngine.Random.RandomRange(0, 5f);
+
+        Vector3 newPosition = new Vector3(randZ, 2.5f, randZ);
+
+        rb.MovePosition(rb.position + newPosition);
+        UpdateMovementServerRpc(rb.position);
     }
 }
