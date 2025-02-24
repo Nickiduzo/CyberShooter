@@ -27,4 +27,11 @@ public class PlayerData : ScriptableObject
     public Material headYellow;
     public Material cablesYellow;
     public Material ribsYellow;
+
+    [SerializeField] private Vector3[] respawnPoints;
+
+    public Vector3 GetRandomPosition()
+    {
+        return respawnPoints[UnityEngine.Random.Range(0,respawnPoints.Length)];
+    }
 }

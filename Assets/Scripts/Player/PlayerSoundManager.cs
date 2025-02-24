@@ -1,10 +1,26 @@
 using Unity.Netcode;
+using UnityEngine;
 
 public class PlayerSoundManager : NetworkBehaviour
 {
-    public void MakeSlowStep() => AudioManager.instanse.PlayStep();
+    [SerializeField] private AudioSource stepAudioSource;
+    [SerializeField] private AudioSource swordAudioSource;
 
-    public void MakeSword() => AudioManager.instanse.Play("Sword");
+    public Sound[] walkSteps;
+
+    public Sound swordSwing;
+    
+    public void MakeSlowStep()
+    {
+        stepAudioSource.clip = walkSteps[Random.Range(0, walkSteps.Length)].clip;
+        stepAudioSource.Play();
+    }
+
+    public void MakeSword()
+    {
+        swordAudioSource.clip = swordSwing.clip;
+        swordAudioSource.Play();
+    }
 
     public void MakeJump() => AudioManager.instanse.Play("Jump");
 

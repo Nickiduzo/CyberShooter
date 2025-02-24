@@ -11,27 +11,46 @@ public class PlayerRotate : NetworkBehaviour
         NetworkVariableWritePermission.Server
         );
 
-    private void FixedUpdate()
+    
+    public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        base.OnNetworkSpawn();
+        if(IsOwner)
+        {
+            UpdateRotationServerRpc(transform.rotation);
+        }
+    }
 
-        HandlerRotation();
+    private void Update()
+    {
+        if (IsOwner)
+        {
+            HandlerRotation();
+        }
     }
 
     private void HandlerRotation()
     {
         float horizontalInput = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
-        transform.Rotate(Vector3.up, horizontalInput);
 
-        if(Quaternion.Angle(transform.rotation, rotation.Value) > 0.1f)
-        {
-            UpdateRotationServerRpc(transform.rotation);
-        }
+        Quaternion newRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + horizontalInput ,0);
+        
+        UpdateRotationServerRpc(newRotation);
     }
 
     [ServerRpc]
     private void UpdateRotationServerRpc(Quaternion newRotation)
     {
         rotation.Value = newRotation;
+        UpdateRotationClientRpc(newRotation);
+    }
+
+    [ClientRpc]
+    private void UpdateRotationClientRpc(Quaternion newRotation)
+    {
+        if(IsOwner)
+        {
+            transform.rotation = newRotation;
+        }
     }
 }

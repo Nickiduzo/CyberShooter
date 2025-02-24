@@ -1,23 +1,40 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHp : NetworkBehaviour
 {
     [SerializeField] private PlayerData playerData;
     [SerializeField] private SkinnedMeshRenderer skin;
-    
-    private int hp;
+
+    [SerializeField] private Slider hpSlider;
+
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject[] playerElements;
+
+    [SerializeField] private GameObject over;
 
     private NetworkVariable<int> materialIndex = new NetworkVariable<int>(0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);   
 
+    private NetworkVariable<int> healthPoints = new NetworkVariable<int>(1000,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+    private void Start()
+    {
+        SliderInitialization();
+    }
+
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
-            hp = 100;
             SetRandomMaterial();
+
+            healthPoints.Value = 1000;
+            hpSlider.value = healthPoints.Value;
         }
 
         materialIndex.OnValueChanged += (oldValue, newValue) =>
@@ -31,7 +48,6 @@ public class PlayerHp : NetworkBehaviour
     private void SetRandomMaterial()
     {
         int rand = Random.Range(0, 3);
-        print(rand);
         ChangeSkinServerRpc(rand);
     }
 
@@ -78,5 +94,50 @@ public class PlayerHp : NetworkBehaviour
     private void ChangeSkinServerRpc(int index)
     {
         materialIndex.Value = index;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        DecreaseHpServerRpc(damage);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DecreaseHpServerRpc(int damage)
+    {
+        if(healthPoints.Value - damage > 0)
+        {
+            healthPoints.Value -= damage;
+            UpdateClientRpc(healthPoints.Value);
+        }
+        else
+        {
+            print("Player die");
+            player.SetActive(false);
+
+            foreach (var item in playerElements)
+            {
+                item.SetActive(false);
+            }
+
+            over.SetActive(true);
+        }
+    }
+
+    [ClientRpc]
+    private void UpdateClientRpc(int newHp)
+    {
+        hpSlider.value = newHp;
+    }
+
+    private void SliderInitialization()
+    {
+        if(IsOwner)
+        {
+            hpSlider.gameObject.SetActive(true);
+        }
+        else
+        {
+            hpSlider.gameObject.SetActive(false);
+        }
     }
 }

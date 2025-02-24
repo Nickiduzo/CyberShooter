@@ -1,10 +1,11 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private PlayerAttackTimer attackTimer;
+
+    [SerializeField] private PlayerData playerData;
 
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float runSpeed = 6f;
@@ -74,11 +75,15 @@ public class PlayerMove : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        float randZ = UnityEngine.Random.RandomRange(0, 5f);
+        Spawn();
+    }
 
-        Vector3 newPosition = new Vector3(randZ, 2.5f, randZ);
+    private void Spawn()
+    {
+        Vector3 newPosition = playerData.GetRandomPosition();
 
         rb.MovePosition(rb.position + newPosition);
+
         UpdateMovementServerRpc(rb.position);
     }
 }

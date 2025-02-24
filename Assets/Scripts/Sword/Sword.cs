@@ -1,9 +1,12 @@
+using System;
+using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Sword : MonoBehaviour
 {
-    public UnityEvent<int> OnHit;
+    public static event Action<int> ShowDamage;
 
     public bool canDamage = false;
 
@@ -17,15 +20,19 @@ public class Sword : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(canDamage)
+        if (!canDamage) return;
+
+        if(other.CompareTag("Player"))
         {
-            if(other.gameObject.CompareTag("Enemy"))
+            if(other.TryGetComponent(out PlayerHp playerHp))
             {
                 AudioManager.instanse.Play("HitOnEnemy");
-                OnHit.Invoke(swordDamage);
+                ShowDamage?.Invoke(swordDamage);
+                playerHp.TakeDamage(swordDamage);
             }
         }
     }
+
 
     private void SwordOn() => canDamage = true;
     private void SwordOff() => canDamage = false;
