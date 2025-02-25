@@ -26,7 +26,6 @@ public class Sword : MonoBehaviour
         {
             if(other.TryGetComponent(out PlayerHp playerHp))
             {
-                AudioManager.instanse.Play("HitOnEnemy");
                 ShowDamage?.Invoke(swordDamage);
                 playerHp.TakeDamage(swordDamage);
             }

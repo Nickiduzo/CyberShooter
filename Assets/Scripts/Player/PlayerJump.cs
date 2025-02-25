@@ -29,7 +29,11 @@ public class PlayerJump : NetworkBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded && jumpCoolDown <= 0)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Vector3 jumpDirection = transform.forward + new Vector3(0,2,0);
+            jumpDirection.Normalize();
+
+            rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
+            
             isGrounded = false;
             playerAnimation.JumpServerRpc();
         }

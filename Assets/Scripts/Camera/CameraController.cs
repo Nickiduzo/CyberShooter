@@ -1,44 +1,20 @@
+using Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 
 public class CameraController : NetworkBehaviour
 {
     [SerializeField] private Camera playerCamera;
-    private AudioListener audioListener;
-
-    private void Start()
-    {
-        audioListener = GetComponent<AudioListener>();
-
-        if(IsOwner)
-        {
-            playerCamera.gameObject.SetActive(true);
-            if(audioListener != null)
-            {
-                audioListener.enabled = false;
-            }
-        }
-        else
-        {
-            playerCamera.gameObject.SetActive(false);
-            if(audioListener != null)
-            {
-                audioListener.enabled = false;
-            }
-        }
-    }
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private AudioListener audioListener;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        
-        if(!IsOwner)
-        {
-            playerCamera.gameObject.SetActive(false);
-            if (audioListener != null)
-            {
-                audioListener.enabled = false;
-            }
-        }
+
+        playerCamera.gameObject.SetActive(IsOwner);
+        virtualCamera.gameObject.SetActive(IsOwner);
+        Cursor.visible = IsOwner;
+        audioListener.enabled = IsOwner;
     }
 }

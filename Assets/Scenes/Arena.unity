@@ -45181,6 +45181,7 @@ GameObject:
   - component: {fileID: 1047181747}
   - component: {fileID: 1047181746}
   - component: {fileID: 1047181749}
+  - component: {fileID: 1047181750}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -45398,7 +45399,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -45406,10 +45407,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 100
+  MinDistance: 10.940041
+  MaxDistance: 18.04
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -45495,24 +45496,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musics:
-  - clipName: Chern
-    clip: {fileID: 8300000, guid: 3c8a39bfb74e54649a91c8658d30a12f, type: 3}
-    volume: 0
-    pitch: 0
-    isLoop: 0
-    source: {fileID: 0}
-  - clipName: Dr
-    clip: {fileID: 8300000, guid: ad5ce64664cc6a349a8fab2854d75091, type: 3}
-    volume: 0
-    pitch: 0
-    isLoop: 0
-    source: {fileID: 0}
-  - clipName: Ivoxygen
-    clip: {fileID: 8300000, guid: 57d92cc06f6003e46a654e797106395a, type: 3}
-    volume: 0
-    pitch: 0
-    isLoop: 0
-    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 3c8a39bfb74e54649a91c8658d30a12f, type: 3}
+  - clip: {fileID: 8300000, guid: ad5ce64664cc6a349a8fab2854d75091, type: 3}
+  - clip: {fileID: 8300000, guid: 57d92cc06f6003e46a654e797106395a, type: 3}
   musicSource: {fileID: 1047181746}
 --- !u!114 &1047181748
 MonoBehaviour:
@@ -45556,6 +45542,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1183024399 &1047181750
+LookAtConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047181738}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_Roll: 0
+  m_WorldUpObject: {fileID: 0}
+  m_UseUpObject: 0
+  m_Active: 1
+  m_IsLocked: 0
+  m_Sources: []
 --- !u!43 &1067170096
 Mesh:
   m_ObjectHideFlags: 0
@@ -70774,7 +70778,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -70782,10 +70786,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 3.24
-  MaxDistance: 100
+  MinDistance: 4.307602
+  MaxDistance: 10.952019
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -70871,24 +70875,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musics:
-  - clipName: chern
-    clip: {fileID: 8300000, guid: 3c8a39bfb74e54649a91c8658d30a12f, type: 3}
-    volume: 0
-    pitch: 0
-    isLoop: 0
-    source: {fileID: 0}
-  - clipName: dr
-    clip: {fileID: 8300000, guid: ad5ce64664cc6a349a8fab2854d75091, type: 3}
-    volume: 0
-    pitch: 0
-    isLoop: 0
-    source: {fileID: 0}
-  - clipName: ivoxygen
-    clip: {fileID: 8300000, guid: 57d92cc06f6003e46a654e797106395a, type: 3}
-    volume: 0
-    pitch: 0
-    isLoop: 0
-    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 3c8a39bfb74e54649a91c8658d30a12f, type: 3}
+  - clip: {fileID: 8300000, guid: ad5ce64664cc6a349a8fab2854d75091, type: 3}
+  - clip: {fileID: 8300000, guid: 57d92cc06f6003e46a654e797106395a, type: 3}
   musicSource: {fileID: 1869145928}
 --- !u!95 &1869145930
 Animator:

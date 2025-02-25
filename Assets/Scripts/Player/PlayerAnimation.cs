@@ -16,8 +16,6 @@ public class PlayerAnimation : NetworkBehaviour
 
     private bool isGrounded;
 
-    private float hitCooldown;
-
     private NetworkVariable<float> networkX = new NetworkVariable<float>();
     private NetworkVariable<float> networkY = new NetworkVariable<float>();
     private NetworkVariable<bool> networkIsMoving = new NetworkVariable<bool>();
@@ -25,7 +23,6 @@ public class PlayerAnimation : NetworkBehaviour
     private void Awake()
     {
         InitializeListeners();
-        hitCooldown = 1.5f;
     }
 
     private void Update()
@@ -36,7 +33,6 @@ public class PlayerAnimation : NetworkBehaviour
         Dance();
         StartMoving();
         MoveBehaviour();
-        hitCooldown -= Time.deltaTime;
     }
 
     [ServerRpc]
@@ -90,21 +86,18 @@ public class PlayerAnimation : NetworkBehaviour
         {
             anim.SetTrigger("Dance");
             PerformDanceServerRpc("Dance");
-            AudioManager.instanse.Play("Polskaya");
         }
 
         if(Input.GetKeyDown(KeyCode.H) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
         {
             anim.SetTrigger("Nyan");
             PerformDanceServerRpc("Nyan");
-            AudioManager.instanse.Play("Nyan");
         }
 
         if(Input.GetKeyDown(KeyCode.J) && x == 0 && y == 0 && playerBehaviour.currentState == PlayerState.Empty)
         {
             anim.SetTrigger("Best");
             PerformDanceServerRpc("Best");
-            AudioManager.instanse.Play("Best");
         }
     }
 
@@ -124,44 +117,33 @@ public class PlayerAnimation : NetworkBehaviour
 
     public void DetectSwordAnimation(int animationIndex)
     {
-        if (hitCooldown <= 0)
-        {
             switch (animationIndex)
             {
                 case 1:
                     SwordAttack();
-                    hitCooldown = 1f;
                     break;
                 case 2:
                     SwordDoubleAttack();
-                    hitCooldown = 1.4f;
                     break;
                 case 3:
                     SwordChargeAttack();
-                    hitCooldown = 1.8f;
                     break;
                 case 4:
                     SwordChargeDoubleAttack();
-                    hitCooldown = 2f;
                     break;
                 case 5:
                     SwordAttack();
-                    hitCooldown = 2f;
                     break;
                 case 6:
                     SwordDoubleAttack();
-                    hitCooldown = 3f;
                     break;
                 case 7:
                     SwordChargeAttack();
-                    hitCooldown = 3f;
                     break;
                 case 8:
                     SwordChargeDoubleAttack();
-                    hitCooldown = 4f;
                     break;
             }
-        }
     }
     private void SwordAttack()
     {

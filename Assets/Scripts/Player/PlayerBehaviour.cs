@@ -55,6 +55,14 @@ public class PlayerBehaviour : NetworkBehaviour
     [ClientRpc]
     private void SetPlayerStateClientRpc(PlayerState newState) => SetPlayerState(newState);
 
+    public void RespawnPlayerBehaviour()
+    {
+        if(IsOwner)
+        {
+            SetPlayerStateServerRpc(PlayerState.Empty);
+        }
+    }
+
     private void SetPlayerState(PlayerState newState)
     {
         currentState = newState;

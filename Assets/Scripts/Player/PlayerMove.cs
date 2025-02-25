@@ -78,11 +78,11 @@ public class PlayerMove : NetworkBehaviour
         Spawn();
     }
 
-    private void Spawn()
+    public void Spawn()
     {
         Vector3 newPosition = playerData.GetRandomPosition();
 
-        rb.MovePosition(rb.position + newPosition);
+        rb.MovePosition(newPosition);
 
         UpdateMovementServerRpc(rb.position);
     }

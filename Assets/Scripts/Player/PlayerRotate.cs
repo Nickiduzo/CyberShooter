@@ -31,26 +31,16 @@ public class PlayerRotate : NetworkBehaviour
 
     private void HandlerRotation()
     {
-        float horizontalInput = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+        float horizontalInput = Input.GetAxis("Mouse X") * rotationSpeed;
 
-        Quaternion newRotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + horizontalInput ,0);
-        
-        UpdateRotationServerRpc(newRotation);
+        transform.Rotate(Vector3.up, horizontalInput);
+
+        UpdateRotationServerRpc(transform.rotation);
     }
 
     [ServerRpc]
     private void UpdateRotationServerRpc(Quaternion newRotation)
     {
         rotation.Value = newRotation;
-        UpdateRotationClientRpc(newRotation);
-    }
-
-    [ClientRpc]
-    private void UpdateRotationClientRpc(Quaternion newRotation)
-    {
-        if(IsOwner)
-        {
-            transform.rotation = newRotation;
-        }
     }
 }

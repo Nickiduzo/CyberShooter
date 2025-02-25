@@ -1,10 +1,17 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent (typeof(PlayerBehaviour))]
 public class PlayerAttackTimer : NetworkBehaviour
 {
     [SerializeField] private PlayerBehaviour playerBehaviour;
+
+    [SerializeField] private GameObject cooldowns;
+    [SerializeField] private Image usualImage;
+    [SerializeField] private Image unusualImage;
+    [SerializeField] private Image hardImage;
+    [SerializeField] private Image ultimateImage;
 
     [Header("Two swords")]
     [SerializeField][Range(0,2f)] private float swordsAttack;
@@ -26,12 +33,16 @@ public class PlayerAttackTimer : NetworkBehaviour
 
     private float currentTimer;
 
+    private int currentImageIndex;
+    private float maxCooldown;
+
     private PlayerState playerState;
 
     public bool isKick = false;
     private void Start()
     {
         SetState();
+        InitializationCooldowns();
     }
 
     private void Update()
@@ -39,7 +50,11 @@ public class PlayerAttackTimer : NetworkBehaviour
         if (!IsOwner) return;
 
         SetState();
-        HandlerAttack();
+        
+        if(!isKick)
+        {
+            HandlerAttack();
+        }
 
         if(currentTimer <= 0)
         {
@@ -49,95 +64,103 @@ public class PlayerAttackTimer : NetworkBehaviour
         {
             currentTimer -= Time.deltaTime;
         }
+
+        UpdateCooldownUI();
     }
 
     private void HandlerAttack()
     {
+        if (isKick) return;
         if(playerState == PlayerState.TwoSwords)
         {
-            isKick = true;
-
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(0))
             {
-                if(Input.GetMouseButtonDown(0))
-                {
-                    currentTimer = swordsChargeAttack;
-                }
-
-                if(Input.GetMouseButtonDown(1))
-                {
-                    currentTimer = swordsDChargeAttack;
-                }
+                SetCooldown(swordsChargeAttack, 3);
             }
-
-            if(Input.GetMouseButtonDown(0))
+            else if (Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(1))
             {
-                currentTimer = swordsAttack;
+                SetCooldown(swordsDChargeAttack, 4);
             }
-
-            if(Input.GetMouseButtonDown(1))
+            else if (Input.GetMouseButtonDown(0))
             {
-                currentTimer = swordsDoubleAttack;
+                SetCooldown(swordsAttack, 1);
+            }
+            else if(Input.GetMouseButtonDown(1))
+            {
+                SetCooldown(swordsDoubleAttack, 2);
             }
         }
     
         if(playerState == PlayerState.Sword)
         {
-            isKick = true;
-
-            if(Input.GetKeyDown(KeyCode.W))
+            if(Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(0))
             {
-                if(Input.GetMouseButtonDown(0))
-                {
-                    currentTimer = swordChargeAttack;
-                }
-
-                if(Input.GetMouseButtonDown(1))
-                {
-                    currentTimer = swordJumpAttack;
-                }
+                SetCooldown(swordChargeAttack, 3);
             }
-
-            if(Input.GetMouseButtonDown(0))
+            else if (Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(1))
             {
-                currentTimer = swordAttack;
+                SetCooldown(swordJumpAttack, 4);
             }
-
-            if(Input.GetMouseButtonDown(1))
+            else if (Input.GetMouseButtonDown(0))
             {
-                currentTimer = swordHard;
+                SetCooldown(swordAttack, 1);
+            }
+            else if(Input.GetMouseButtonDown(1))
+            {
+                SetCooldown(swordHard, 2);
             }
         }
 
         if(playerState == PlayerState.FastSwords)
         {
-            isKick = true;
-
-            if(Input.GetKeyDown(KeyCode.W))
+            if(Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(0))
             {
-                if(Input.GetMouseButtonDown(0))
-                {
-                    currentTimer = chargeAttack;
-                }
-
-                if(Input.GetMouseButtonDown(1))
-                {
-                    currentTimer = dChargeAttack;
-                }
+                SetCooldown(chargeAttack, 3);
             }
-
-            if(Input.GetMouseButtonDown(0))
+            else if (Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(1))
             {
-                currentTimer = fastAttack;
+                SetCooldown(dChargeAttack, 4);
             }
-
-            if(Input.GetMouseButtonDown(1))
+            else if (Input.GetMouseButtonDown(0))
             {
-                currentTimer = doubleAttack;
+                SetCooldown(fastAttack, 1);
+            }
+            else if(Input.GetMouseButtonDown(1))
+            {
+                SetCooldown(doubleAttack, 2);
             }
         }
     }
 
+    private void SetCooldown(float cooldown, int index)
+    {
+        currentTimer = cooldown;
+        maxCooldown = cooldown;
+
+        isKick = true;
+
+        currentImageIndex = index;
+    }
+
+    private void UpdateCooldownUI()
+    {
+        if (maxCooldown <= 0) return;
+        switch (currentImageIndex)
+        {
+            case 1:
+                usualImage.fillAmount = Mathf.Clamp01(1 - (currentTimer / maxCooldown));
+                break;
+            case 2:
+                unusualImage.fillAmount = Mathf.Clamp01(1 - (currentTimer / maxCooldown));
+                break;
+            case 3:
+                hardImage.fillAmount = Mathf.Clamp01(1 - (currentTimer / maxCooldown));
+                break;
+            case 4:
+                ultimateImage.fillAmount = Mathf.Clamp01(1 - (currentTimer / maxCooldown));
+                break;
+        }
+    }
 
     public bool GetKick()
     {
@@ -145,4 +168,9 @@ public class PlayerAttackTimer : NetworkBehaviour
     }
 
     private void SetState() => playerState = playerBehaviour.currentState;
+
+    private void InitializationCooldowns()
+    {
+        cooldowns.SetActive(IsOwner);
+    }
 }

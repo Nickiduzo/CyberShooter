@@ -21,8 +21,4 @@ public class PlayerSoundManager : NetworkBehaviour
         swordAudioSource.clip = swordSwing.clip;
         swordAudioSource.Play();
     }
-
-    public void MakeJump() => AudioManager.instanse.Play("Jump");
-
-    public void StopMusic() => AudioManager.instanse.Stop("Polskaya");
 }

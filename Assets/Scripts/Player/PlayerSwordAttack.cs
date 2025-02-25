@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class PlayerSwordAttack : NetworkBehaviour
 {
     [SerializeField] private PlayerBehaviour playerBehaviour;
+    [SerializeField] private PlayerAttackTimer attackCooldown;
 
     private PlayerState currentState;
 
@@ -20,6 +21,7 @@ public class PlayerSwordAttack : NetworkBehaviour
     }
     private void HandlerAnimation()
     {
+        if (attackCooldown.GetKick()) return;
         if (Input.GetKey(KeyCode.W) && Input.GetMouseButtonDown(0))
         {
             ChargeAttack();

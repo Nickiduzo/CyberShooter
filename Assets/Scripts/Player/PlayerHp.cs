@@ -10,6 +10,8 @@ public class PlayerHp : NetworkBehaviour
     [SerializeField] private Slider hpSlider;
 
     [SerializeField] private GameObject player;
+    [SerializeField] private PlayerMove playerMove;
+    [SerializeField] private PlayerBehaviour playerBehaviour;
     [SerializeField] private GameObject[] playerElements;
 
     [SerializeField] private GameObject over;
@@ -111,14 +113,56 @@ public class PlayerHp : NetworkBehaviour
         }
         else
         {
-            print("Player die");
-            player.SetActive(false);
+            DieServerRpc();
+        }
+    }
 
-            foreach (var item in playerElements)
-            {
-                item.SetActive(false);
-            }
+    [ServerRpc(RequireOwnership = false)]
+    private void DieServerRpc()
+    {
+        ShowOverMessageClientRpc();
 
+        healthPoints.Value = 0;
+        player.SetActive(false);
+
+        foreach (var item in playerElements)
+        {
+            item.SetActive(false);
+        }
+
+        RespawnServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RespawnServerRpc()
+    {
+        healthPoints.Value = 1000;
+        RespawnClientRpc();
+
+        foreach (var item in playerElements)
+        {
+            item.SetActive(true);
+        }
+
+        player.SetActive(true);
+        UpdateClientRpc(healthPoints.Value);
+    }
+
+    [ClientRpc]
+    private void RespawnClientRpc()
+    {
+        if (IsOwner) 
+        {
+            playerMove.Spawn();
+            playerBehaviour.RespawnPlayerBehaviour();
+        }
+    }
+
+    [ClientRpc]
+    private void ShowOverMessageClientRpc()
+    {
+        if (IsOwner)
+        {
             over.SetActive(true);
         }
     }

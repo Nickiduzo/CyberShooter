@@ -29,6 +29,16 @@ public class ArenaUI : NetworkBehaviour
         {
             Cursor.visible = true;
         }
+        else if (Input.GetKeyDown(KeyCode.Escape) && Cursor.visible)
+        {
+            Cursor.visible = false;
+        }
+
+        if(Input.GetMouseButtonDown(0) && Cursor.visible)
+        {
+            Cursor.visible = false;
+        }
+
 
         if(Input.GetKeyDown(KeyCode.Tab) && !tabInformation.activeSelf)
         {

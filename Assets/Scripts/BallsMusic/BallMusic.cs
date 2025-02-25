@@ -11,7 +11,7 @@ public class BallMusic : NetworkBehaviour
 
     private void Start()
     {
-        if (IsServer) // Хост выбирает музыку
+        if (IsServer) 
         {
             ChooseRandomTrackServerRpc();
         }
