@@ -19,6 +19,7 @@ public class ArenaUI : NetworkBehaviour
         exitButton.onClick.AddListener(ExitFromArena);
 
         Sword.ShowDamage += ShowDamageHandler;
+
     }
 
     private void Update()
