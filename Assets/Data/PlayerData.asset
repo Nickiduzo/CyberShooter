@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 420036ea61736284196086c2fd70d58b, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
+  currentSword: 7
+  currentSwords: 2
+  currentFastSwords: 4
+  currentColor: 2
+  currentName: Vellansole
   body: {fileID: 2100000, guid: 06c0bf3f4fa79ad4ca32996dba9a7e3d, type: 2}
   head: {fileID: 2100000, guid: 4393159061268164a9fe0d9cb617dc9f, type: 2}
   cables: {fileID: 2100000, guid: 8dd01fbb8d837b845a3bf0a479202459, type: 2}

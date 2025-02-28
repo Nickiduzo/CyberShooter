@@ -4,6 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData/Data", menuName = "PlayerData")]
 public class PlayerData : ScriptableObject
 {
+    public int currentSword;
+    public int currentSwords;
+    public int currentFastSwords;
+    public int currentColor;
+    public string currentName;
+
     [Header("Standard")]
     public Material body;
     public Material head;

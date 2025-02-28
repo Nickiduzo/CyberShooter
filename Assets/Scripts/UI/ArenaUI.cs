@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,6 +11,18 @@ public class ArenaUI : NetworkBehaviour
 
     [SerializeField] private GameObject tabInformation;
 
+    [Header("Text's prefabs")]
+    [SerializeField] private GameObject playerName;
+    [SerializeField] private GameObject playerKills;
+    [SerializeField] private GameObject playerDeathAmount;
+    [SerializeField] private GameObject playerStatistic;
+
+    [Header("Spaces")]
+    [SerializeField] private Transform namesSpace;
+    [SerializeField] private Transform deathsSpace;
+    [SerializeField] private Transform killsSpace;
+    [SerializeField] private Transform KDSpace;
+
     [SerializeField] private TextMeshProUGUI textDamage;
     [SerializeField] private Animator damageAnimator;
     [SerializeField] private string[] damageAnimationNames;
@@ -19,7 +32,6 @@ public class ArenaUI : NetworkBehaviour
         exitButton.onClick.AddListener(ExitFromArena);
 
         Sword.ShowDamage += ShowDamageHandler;
-
     }
 
     private void Update()
@@ -44,10 +56,71 @@ public class ArenaUI : NetworkBehaviour
         if(Input.GetKeyDown(KeyCode.Tab) && !tabInformation.activeSelf)
         {
             tabInformation.SetActive(true);
+            UpdatePlayerList();
         }
         else if(Input.GetKeyDown(KeyCode.Tab) && tabInformation.activeSelf) 
         {
             tabInformation.SetActive(false);
+        }
+    }
+
+    private void UpdatePlayerList()
+    {
+        if (IsOwner)
+        {
+            FillPlayerList(PlayerSpawner.Instance.GetAllPlayers());
+        }
+        else
+        {
+            PlayerSpawner.Instance.RequestPlayersServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
+    }
+
+    private void FillPlayerList(List<PlayerStats> players)
+    {
+        ClearAllContents();
+
+        foreach (PlayerStats player in players)
+        {
+            GameObject nameEntry = Instantiate(playerName, namesSpace);
+            TextMeshProUGUI nameText = nameEntry.GetComponent<TextMeshProUGUI>();
+            nameText.text = player.name;
+
+            GameObject killsEntry = Instantiate(playerKills, killsSpace);
+            TextMeshProUGUI killText = killsEntry.GetComponent<TextMeshProUGUI>();
+            killText.text = player.Kills.Value.ToString();
+
+            GameObject deathEntry = Instantiate(playerDeathAmount, deathsSpace);
+            TextMeshProUGUI deathText = deathEntry.GetComponent<TextMeshProUGUI>();
+            deathText.text = player.Deaths.Value.ToString();
+
+            GameObject statistic = Instantiate(playerStatistic, KDSpace);
+            TextMeshProUGUI statisticText = statistic.GetComponent<TextMeshProUGUI>();
+            statisticText.text = player.KD.ToString();
+        }
+    }
+
+
+    private void ClearAllContents()
+    {
+        foreach (Transform child in namesSpace)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in deathsSpace)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in killsSpace)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in KDSpace)
+        {
+            Destroy(child.gameObject);
         }
     }
 

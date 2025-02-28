@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public class PlayerHp : NetworkBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private PlayerMove playerMove;
     [SerializeField] private PlayerBehaviour playerBehaviour;
+    [SerializeField] private TextMeshProUGUI amountOfHealth;
     [SerializeField] private GameObject[] playerElements;
 
     [SerializeField] private GameObject over;
@@ -33,45 +35,56 @@ public class PlayerHp : NetworkBehaviour
     {
         if (IsOwner)
         {
-            SetRandomMaterial();
-
-            healthPoints.Value = 1000;
-            hpSlider.value = healthPoints.Value;
+            ApplyMaterial();
+            SetHealth(1000);
+            RequestSyncServerRpc(playerData.currentColor);
+        }
+        else
+        {
+            ApplyMaterialByIndex(materialIndex.Value);
         }
 
-        materialIndex.OnValueChanged += (oldValue, newValue) =>
+        materialIndex.OnValueChanged += (oldIndex, newIndex) =>
         {
-            ApplyMaterial(newValue);
+            ApplyMaterialByIndex(newIndex);
         };
-
-        ApplyMaterial(materialIndex.Value);
     }
 
-    private void SetRandomMaterial()
+    private void ApplyMaterial()
     {
-        int rand = Random.Range(0, 3);
-        ChangeSkinServerRpc(rand);
+        ApplyMaterialByIndex(playerData.currentColor);
     }
 
-    private void ApplyMaterial(int index)
+    private void ApplyMaterialByIndex(int index)
     {
-        switch (index)
+        switch(index)
         {
-            case 0:
-                SetYellow();
-                break;
-            case 1:
-                SetRed();
-                break;
-            case 2:
-                SetGreen();
-                break;
-            default:
-                SetStandard();
-                break;
+            case 0: SetStandard(); break;
+            case 1: SetGreen(); break;
+            case 2: SetYellow(); break;
+            case 4: SetRed(); break;
         }
     }
 
+    private void SetHealth(int value)
+    {
+        healthPoints.Value = value;
+        hpSlider.value = healthPoints.Value;
+        amountOfHealth.text = value.ToString();
+    }
+
+    [ServerRpc]
+    private void RequestSyncServerRpc(int colorIndex, ServerRpcParams rpcParams = default)
+    {
+        materialIndex.Value = colorIndex;   
+        ApplyMaterialClientRpc(colorIndex);
+    }
+
+    [ClientRpc]
+    private void ApplyMaterialClientRpc(int index)
+    {
+        ApplyMaterialByIndex(index);
+    }
     private void SetStandard()
     {
         skin.materials = new Material[] { playerData.body, playerData.cables, playerData.head, playerData.ribs};
@@ -90,12 +103,6 @@ public class PlayerHp : NetworkBehaviour
     private void SetGreen()
     {
         skin.materials = new Material[] { playerData.bodyGreen, playerData.cablesGreen, playerData.headGreen, playerData.ribsGreen };
-    }
-
-    [ServerRpc]
-    private void ChangeSkinServerRpc(int index)
-    {
-        materialIndex.Value = index;
     }
 
     public void TakeDamage(int damage)
@@ -171,6 +178,7 @@ public class PlayerHp : NetworkBehaviour
     private void UpdateClientRpc(int newHp)
     {
         hpSlider.value = newHp;
+        amountOfHealth.text = newHp.ToString();
     }
 
     private void SliderInitialization()

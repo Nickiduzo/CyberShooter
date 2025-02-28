@@ -11,6 +11,10 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
 
+    [Header("Music")]
+    [SerializeField] private Sound[] music;
+    [SerializeField] private AudioSource audioSource;
+
     [Header("Buttons Character Hadnler")]
     [SerializeField] private Button colorButton;
     [SerializeField] private Button swordButton;
@@ -37,14 +41,12 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Button yellow;
     [SerializeField] private Button green;
     [SerializeField] private Button red;
-    [SerializeField] private Button applyColorButton;
     [SerializeField] private TMP_InputField inputField;
 
     [Header("Sword Panel")]
     [SerializeField] private TextMeshProUGUI swordName;
     [SerializeField] private Button swordRightArrow;
     [SerializeField] private Button swordLeftArrow;
-    [SerializeField] private Button applySwordButton;
     [SerializeField] private GameObject[] hardSwords;
     private int currentSword = 0;
 
@@ -52,7 +54,6 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI swordsName;
     [SerializeField] private Button swordsRightArrowButton;
     [SerializeField] private Button swordsLeftArrowButton;
-    [SerializeField] private Button applySwordsButton;
     [SerializeField] private GameObject[] swords;
     private int currentSwords = 0;
 
@@ -60,11 +61,11 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fastSwordsName;
     [SerializeField] private Button fastRightArrowButton;
     [SerializeField] private Button fastLeftArrowButton;
-    [SerializeField] private Button applyFastSwordsButton;
     [SerializeField] private GameObject[] fastSwords;
     private int currentFastSwords = 0;
 
     [SerializeField] private Button exitButton;
+
     private void Awake()
     {
         Cursor.visible = true;
@@ -74,6 +75,18 @@ public class MenuUI : MonoBehaviour
         exitButton.onClick.AddListener(ExitGame);
 
         InitializeCharacterButtons();
+
+        InitializeData();
+
+        ChooseRandomTrack();
+    }
+
+    private void Update()
+    {
+        if(!audioSource.isPlaying)
+        {
+            ChooseRandomTrack();
+        }
     }
 
     private void InitializeCharacterButtons()
@@ -103,7 +116,64 @@ public class MenuUI : MonoBehaviour
         inputField.onValueChanged.AddListener(ValidateAndDisplayName);
     }
 
-    public void ChooseSword()
+    private void InitializeData()
+    {
+        // realization of load texts and swords
+        playerName.text = playerData.currentName;
+
+        switch (playerData.currentColor)
+        {
+            case 0: ChoosePurple();
+                break;
+            case 1: ChooseGreen();
+                break;
+            case 2: ChooseYellow();
+                break;
+            case 3: ChooseRed();
+                break;
+        }
+
+        for (int i = 0; i < swords.Length; i++)
+        {
+            if(i == playerData.currentSwords)
+            {
+                swords[i].SetActive(true);
+                swordsName.text = swords[i].name;
+            }
+            else
+            {
+                swords[i].SetActive(false);
+            }
+        }
+
+        for (int i = 0; i < fastSwords.Length; i++)
+        {
+            if(i == playerData.currentFastSwords)
+            {
+                fastSwords[i].SetActive(true);
+                fastSwordsName.text = fastSwords[i].name;
+            }
+            else
+            {
+                fastSwords[i].SetActive(false);
+            }
+        }
+
+        for (int i = 0; i < hardSwords.Length; i++)
+        {
+            if(i == playerData.currentSword)
+            {
+                hardSwords[i].SetActive(true);
+                swordName.text = hardSwords[i].name;
+            }
+            else
+            {
+                hardSwords[i].SetActive(false);
+            }
+        }
+    }
+
+    private void ChooseSword()
     {
         slider.gameObject.SetActive(false);
         StartCoroutine(CameraTransition(swordCamera));
@@ -135,21 +205,32 @@ public class MenuUI : MonoBehaviour
     private void ChoosePurple()
     {
         skin.materials = new Material[] { playerData.body, playerData.cables, playerData.head, playerData.ribs };
+        playerData.currentColor = 0;
     }
 
     private void ChooseRed()
     {
         skin.materials = new Material[] { playerData.bodyRed, playerData.cablesRed, playerData.headRed, playerData.ribsRed };
+        playerData.currentColor = 3;
     }
 
     private void ChooseYellow()
     {
         skin.materials = new Material[] { playerData.bodyYellow, playerData.cablesYellow, playerData.headYellow, playerData.ribsYellow };
+        playerData.currentColor = 2;
     }
 
     private void ChooseGreen()
     {
         skin.materials = new Material[] { playerData.bodyGreen, playerData.cablesGreen, playerData.headGreen, playerData.ribsGreen };
+        playerData.currentColor = 1;
+    }
+
+    private void ChooseRandomTrack()
+    {
+        int newTrack = Random.Range(0, music.Length);
+        audioSource.clip = music[newTrack].clip;
+        audioSource.Play();
     }
 
     private void RotatePlayer(float value)
@@ -165,6 +246,8 @@ public class MenuUI : MonoBehaviour
         }
 
         playerName.text = text;
+
+        playerData.currentName = playerName.text;
     }
 
     private void RightFastSword()
@@ -181,6 +264,7 @@ public class MenuUI : MonoBehaviour
             {
                 fastSwords[i].SetActive(true);
                 fastSwordsName.text = fastSwords[i].name.ToString();
+                playerData.currentFastSwords = i;
             }
             else
             {
@@ -203,6 +287,7 @@ public class MenuUI : MonoBehaviour
             {
                 fastSwords[i].SetActive(true);
                 fastSwordsName.text = fastSwords[i].name.ToString();
+                playerData.currentFastSwords = i;
             }
             else
             {
@@ -226,6 +311,7 @@ public class MenuUI : MonoBehaviour
             {
                 hardSwords[i].SetActive(true);
                 swordName.text = hardSwords[i].name.ToString();
+                playerData.currentSword = i;
             }
             else
             {
@@ -249,6 +335,7 @@ public class MenuUI : MonoBehaviour
             {
                 hardSwords[i].SetActive(true);
                 swordName.text = hardSwords[i].name.ToString();
+                playerData.currentSword = i;
             }
             else
             {
@@ -272,6 +359,7 @@ public class MenuUI : MonoBehaviour
             {
                 swords[i].SetActive(true);
                 swordsName.text = swords[i].name.ToString();
+                playerData.currentSwords = i;
             }
             else
             {
@@ -295,6 +383,7 @@ public class MenuUI : MonoBehaviour
             {
                 swords[i].SetActive(true);
                 swordsName.text = swords[i].name.ToString();
+                playerData.currentSwords = i;
             }
             else
             {
