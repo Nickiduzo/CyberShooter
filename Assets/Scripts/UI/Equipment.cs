@@ -1,16 +1,19 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Equipment : MonoBehaviour
+public class Equipment : NetworkBehaviour
 {
     [SerializeField] private Image[] images;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        gameObject.SetActive(IsOwner);
         ChangeIcon(PlayerState.Empty);
     }
     private void Update()
     {
+        if (!IsOwner) return;
         if(Input.GetKeyDown(KeyCode.Alpha1)) ChangeIcon(PlayerState.Empty);
         if(Input.GetKeyDown(KeyCode.Alpha2)) ChangeIcon(PlayerState.TwoSwords);
         if(Input.GetKeyDown(KeyCode.Alpha3)) ChangeIcon(PlayerState.FastSwords);
@@ -27,7 +30,7 @@ public class Equipment : MonoBehaviour
                 SetImageTransparency(images[0], 0.5f);
                 break;
             case PlayerState.TwoSwords:
-                SetImageTransparency(images[1], 0.5f);
+                SetImageTransparency(images[1], 0.5f);  
                 break;
             case PlayerState.FastSwords:
                 SetImageTransparency(images[2], 0.5f);

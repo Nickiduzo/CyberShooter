@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerSpawner : NetworkBehaviour
+public class PlayerSpawner : MonoBehaviour
 {
     public static PlayerSpawner Instance { get; private set; }
 
@@ -11,28 +11,24 @@ public class PlayerSpawner : NetworkBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
-        NetworkManager.Singleton.OnClientConnectedCallback += PlayerConnectionHandler;
-        NetworkManager.Singleton.OnClientDisconnectCallback += PlayerDisconnectionHandler;
-    }
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-
-        if (IsOwner)
+        if (NetworkManager.Singleton.IsServer)
         {
+            NetworkManager.Singleton.OnClientConnectedCallback += PlayerConnectionHandler;
+            NetworkManager.Singleton.OnClientDisconnectCallback += PlayerDisconnectionHandler;
+
             ulong hostId = NetworkManager.Singleton.LocalClientId;
-            PlayerStats hostPlayer = NetworkManager.Singleton.ConnectedClients[hostId].PlayerObject.GetComponent<PlayerStats>();
-            if(hostPlayer != null)
-            {
-                players[hostId] = hostPlayer;
-            }
+            PlayerConnectionHandler(hostId);
         }
     }
 
     private void PlayerConnectionHandler(ulong playerId)
     {
-        if (!IsOwner) return;
+        if (!NetworkManager.Singleton.IsServer)
+        {
+            return;
+        }
+
         if (!NetworkManager.Singleton.ConnectedClients.ContainsKey(playerId)) return;
 
         PlayerStats player = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject.GetComponent<PlayerStats>();
@@ -44,6 +40,10 @@ public class PlayerSpawner : NetworkBehaviour
 
     private void PlayerDisconnectionHandler(ulong playerId)
     {
+        if (!NetworkManager.Singleton.IsServer) return;
+
+        if (playerId == NetworkManager.Singleton.LocalClientId) return;
+
         if (players.ContainsKey(playerId))
         {
             players.Remove(playerId);
@@ -55,38 +55,9 @@ public class PlayerSpawner : NetworkBehaviour
         return new List<PlayerStats>(players.Values);
     }
 
-    [ServerRpc(RequireOwnership = false)] // Клиенты теперь могут запрашивать игроков
-    public void RequestPlayersServerRpc(ulong clientId)
+    private void OnDisable()
     {
-        List<ulong> playerIds = new List<ulong>(players.Keys);
-        SendPlayersClientRpc(clientId, playerIds.ToArray());
-    }
-
-    [ClientRpc]
-    private void SendPlayersClientRpc(ulong requestingClientId, ulong[] playerIds)
-    {
-        if (NetworkManager.Singleton.LocalClientId == requestingClientId)
-        {
-            players.Clear();
-            foreach (ulong id in playerIds)
-            {
-                if (NetworkManager.Singleton.ConnectedClients.ContainsKey(id))
-                {
-                    PlayerStats player = NetworkManager.Singleton.ConnectedClients[id].PlayerObject.GetComponent<PlayerStats>();
-                    if (player != null)
-                    {
-                        players[id] = player;
-                    }
-                }
-            }
-        }
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-
-        if(IsOwner)
+        if(NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientConnectedCallback -= PlayerConnectionHandler;
             NetworkManager.Singleton.OnClientDisconnectCallback -= PlayerDisconnectionHandler;

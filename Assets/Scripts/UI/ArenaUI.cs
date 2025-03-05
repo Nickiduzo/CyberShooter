@@ -34,6 +34,12 @@ public class ArenaUI : NetworkBehaviour
         Sword.ShowDamage += ShowDamageHandler;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        gameObject.SetActive(IsOwner);
+    }
+
     private void Update()
     {
         if (!IsOwner) return;
@@ -56,23 +62,12 @@ public class ArenaUI : NetworkBehaviour
         if(Input.GetKeyDown(KeyCode.Tab) && !tabInformation.activeSelf)
         {
             tabInformation.SetActive(true);
-            UpdatePlayerList();
+            FillPlayerList(PlayerSpawner.Instance.GetAllPlayers());
+            print(PlayerSpawner.Instance.GetAllPlayers().Count);
         }
         else if(Input.GetKeyDown(KeyCode.Tab) && tabInformation.activeSelf) 
         {
             tabInformation.SetActive(false);
-        }
-    }
-
-    private void UpdatePlayerList()
-    {
-        if (IsOwner)
-        {
-            FillPlayerList(PlayerSpawner.Instance.GetAllPlayers());
-        }
-        else
-        {
-            PlayerSpawner.Instance.RequestPlayersServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
 
@@ -126,8 +121,9 @@ public class ArenaUI : NetworkBehaviour
 
     private void ShowDamageHandler(int damage)
     {
+        if (!IsOwner) return;
         textDamage.gameObject.SetActive(true);
-
+    
         int randomIndex = Random.Range(0, damageAnimationNames.Length - 1);
         textDamage.text = damage.ToString();
         damageAnimator.Play(damageAnimationNames[randomIndex]);
