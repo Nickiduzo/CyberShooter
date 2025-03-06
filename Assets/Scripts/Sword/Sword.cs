@@ -27,7 +27,7 @@ public class Sword : MonoBehaviour
             if(other.TryGetComponent(out PlayerHp playerHp))
             {
                 ShowDamage?.Invoke(swordDamage);
-                playerHp.TakeDamage(swordDamage);
+                playerHp.TakeDamage(swordDamage, NetworkManager.Singleton.LocalClientId);
             }
         }
     }

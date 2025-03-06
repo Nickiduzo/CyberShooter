@@ -62,8 +62,7 @@ public class ArenaUI : NetworkBehaviour
         if(Input.GetKeyDown(KeyCode.Tab) && !tabInformation.activeSelf)
         {
             tabInformation.SetActive(true);
-            FillPlayerList(PlayerSpawner.Instance.GetAllPlayers());
-            print(PlayerSpawner.Instance.GetAllPlayers().Count);
+            FillPlayerList();
         }
         else if(Input.GetKeyDown(KeyCode.Tab) && tabInformation.activeSelf) 
         {
@@ -71,8 +70,9 @@ public class ArenaUI : NetworkBehaviour
         }
     }
 
-    private void FillPlayerList(List<PlayerStats> players)
+    private void FillPlayerList()
     {
+        PlayerStats[] players = FindObjectsOfType<PlayerStats>();
         ClearAllContents();
 
         foreach (PlayerStats player in players)
@@ -94,7 +94,6 @@ public class ArenaUI : NetworkBehaviour
             statisticText.text = player.KD.ToString();
         }
     }
-
 
     private void ClearAllContents()
     {
@@ -121,12 +120,14 @@ public class ArenaUI : NetworkBehaviour
 
     private void ShowDamageHandler(int damage)
     {
-        if (!IsOwner) return;
-        textDamage.gameObject.SetActive(true);
-    
-        int randomIndex = Random.Range(0, damageAnimationNames.Length - 1);
-        textDamage.text = damage.ToString();
-        damageAnimator.Play(damageAnimationNames[randomIndex]);
+        if (IsOwner)
+        {
+            textDamage.gameObject.SetActive(true);
+
+            int randomIndex = Random.Range(0, damageAnimationNames.Length - 1);
+            textDamage.text = damage.ToString();
+            damageAnimator.Play(damageAnimationNames[randomIndex]);
+        }
     }
 
     private void ExitFromArena()

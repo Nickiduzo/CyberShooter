@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,7 +9,10 @@ public class PlayerHp : NetworkBehaviour
     [SerializeField] private PlayerData playerData;
     [SerializeField] private SkinnedMeshRenderer skin;
 
+    [SerializeField] private PlayerStats playerStats;
+
     [SerializeField] private Slider hpSlider;
+    [SerializeField] private TextMeshProUGUI playerNickName;
 
     [SerializeField] private GameObject player;
     [SerializeField] private PlayerMove playerMove;
@@ -26,6 +30,8 @@ public class PlayerHp : NetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
 
+    private bool isDead = false;
+
     private void Start()
     {
         SliderInitialization();
@@ -38,6 +44,7 @@ public class PlayerHp : NetworkBehaviour
             ApplyMaterial();
             SetHealth(1000);
             RequestSyncServerRpc(playerData.currentColor);
+            playerNickName.text = playerData.currentName;
         }
         else
         {
@@ -105,14 +112,19 @@ public class PlayerHp : NetworkBehaviour
         skin.materials = new Material[] { playerData.bodyGreen, playerData.cablesGreen, playerData.headGreen, playerData.ribsGreen };
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, ulong attackerId)
     {
-        DecreaseHpServerRpc(damage);
+        if(!isDead)
+        {
+            DecreaseHpServerRpc(damage, attackerId);
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void DecreaseHpServerRpc(int damage)
+    private void DecreaseHpServerRpc(int damage, ulong attackerId)
     {
+        if (isDead) return;
+
         if(healthPoints.Value - damage > 0)
         {
             healthPoints.Value -= damage;
@@ -120,6 +132,8 @@ public class PlayerHp : NetworkBehaviour
         }
         else
         {
+            isDead = true;
+            NetworkManager.Singleton.ConnectedClients[attackerId].PlayerObject.GetComponent<PlayerStats>().AddKillServerRpc();
             DieServerRpc();
         }
     }
@@ -128,7 +142,6 @@ public class PlayerHp : NetworkBehaviour
     private void DieServerRpc()
     {
         ShowOverMessageClientRpc();
-
         healthPoints.Value = 0;
         player.SetActive(false);
 
@@ -137,13 +150,20 @@ public class PlayerHp : NetworkBehaviour
             item.SetActive(false);
         }
 
+        StartCoroutine(RespawnCoroutine());
+    }
+
+    private IEnumerator RespawnCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+
         RespawnServerRpc();
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void RespawnServerRpc()
     {
-        healthPoints.Value = 1000;
+        isDead = false;
         RespawnClientRpc();
 
         foreach (var item in playerElements)
@@ -152,6 +172,7 @@ public class PlayerHp : NetworkBehaviour
         }
 
         player.SetActive(true);
+        SetHealth(1000);
         UpdateClientRpc(healthPoints.Value);
     }
 

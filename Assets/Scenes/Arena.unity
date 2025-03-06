@@ -52851,7 +52851,6 @@ GameObject:
   - component: {fileID: 1047181748}
   - component: {fileID: 1047181747}
   - component: {fileID: 1047181746}
-  - component: {fileID: 1047181749}
   - component: {fileID: 1047181750}
   m_Layer: 0
   m_Name: Ball
@@ -53070,7 +53069,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.1
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -53078,8 +53077,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 10
+  MinDistance: 2
+  MaxDistance: 50
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -53192,27 +53191,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!95 &1047181749
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047181738}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fa0f2631ccf28344892ec4511eaea59d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1183024399 &1047181750
 LookAtConstraint:
   m_ObjectHideFlags: 0
@@ -82455,7 +82433,6 @@ GameObject:
   - component: {fileID: 1869145926}
   - component: {fileID: 1869145929}
   - component: {fileID: 1869145928}
-  - component: {fileID: 1869145930}
   m_Layer: 0
   m_Name: Ball (1)
   m_TagString: Untagged
@@ -82673,7 +82650,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.25
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -82681,8 +82658,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 10
+  MinDistance: 2
+  MaxDistance: 50
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -82774,27 +82751,6 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: ad5ce64664cc6a349a8fab2854d75091, type: 3}
   - clip: {fileID: 8300000, guid: 57d92cc06f6003e46a654e797106395a, type: 3}
   musicSource: {fileID: 1869145928}
---- !u!95 &1869145930
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869145920}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 553cffa1864982449a58b6d09e01f0ba, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!43 &1873701112
 Mesh:
   m_ObjectHideFlags: 0
@@ -84603,74 +84559,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1001 &2053385774
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3099028850078958265, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8039500587071465755, guid: c4853074ce8224844acee2441008fc7f,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c4853074ce8224844acee2441008fc7f, type: 3}
 --- !u!43 &2064530067
 Mesh:
   m_ObjectHideFlags: 0
@@ -87064,4 +86952,3 @@ SceneRoots:
   - {fileID: 1514345022}
   - {fileID: 1433869585}
   - {fileID: 59394967}
-  - {fileID: 2053385774}

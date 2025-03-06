@@ -34,7 +34,7 @@ public class PlayerStats : NetworkBehaviour
         PlayerName.Value = new FixedString64Bytes(newName);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void AddKillServerRpc()
     {
         Kills.Value++;
