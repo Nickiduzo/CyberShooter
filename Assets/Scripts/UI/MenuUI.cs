@@ -11,10 +11,6 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
 
-    [Header("Music")]
-    [SerializeField] private Sound[] music;
-    [SerializeField] private AudioSource audioSource;
-
     [Header("Buttons Character Hadnler")]
     [SerializeField] private Button colorButton;
     [SerializeField] private Button swordButton;
@@ -78,15 +74,7 @@ public class MenuUI : MonoBehaviour
 
         InitializeData();
 
-        ChooseRandomTrack();
-    }
-
-    private void Update()
-    {
-        if(!audioSource.isPlaying)
-        {
-            ChooseRandomTrack();
-        }
+        AudioManager.Instance.PlayRandomTrack();
     }
 
     private void InitializeCharacterButtons()
@@ -225,14 +213,6 @@ public class MenuUI : MonoBehaviour
         skin.materials = new Material[] { playerData.bodyGreen, playerData.cablesGreen, playerData.headGreen, playerData.ribsGreen };
         playerData.currentColor = 1;
     }
-
-    private void ChooseRandomTrack()
-    {
-        int newTrack = Random.Range(0, music.Length);
-        audioSource.clip = music[newTrack].clip;
-        audioSource.Play();
-    }
-
     private void RotatePlayer(float value)
     {
         player.transform.rotation = Quaternion.Euler(0, value, 0);
@@ -392,6 +372,16 @@ public class MenuUI : MonoBehaviour
         }
     }
 
+    public void HoverSoundButton()
+    {
+        AudioManager.Instance.Play("HoverButton");
+    }
+
+    public void ClickSoundButton()
+    {
+        AudioManager.Instance.Play("ClickButton");
+    }
+
     private IEnumerator CameraTransition(Camera targetCamera)
     {
         Vector3 startPosition = mainCamera.transform.position;
@@ -424,6 +414,7 @@ public class MenuUI : MonoBehaviour
 
         if (NetworkManager.Singleton.StartHost())
         {
+            AudioManager.Instance.StopAllSounds();
             NetworkManager.Singleton.SceneManager.LoadScene("Arena", LoadSceneMode.Single);
         }
     }
@@ -435,6 +426,7 @@ public class MenuUI : MonoBehaviour
             NetworkManager.Singleton.Shutdown();
         }
 
+        AudioManager.Instance.StopAllSounds();
         NetworkManager.Singleton.StartClient();
     }
     private void ExitGame()

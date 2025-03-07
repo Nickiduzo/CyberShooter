@@ -1,22 +1,115 @@
-using Unity.Netcode;
+using System.Collections;
 using UnityEngine;
 
-public class AudioManager : NetworkBehaviour
+public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instanse;
+    public static AudioManager Instance { get; private set; }
+    public AudioSound[] sounds;
+    public AudioSound[] musicTracks;
 
-    public Sound[] sounds;
-
-    public Sound[] walkSteps;
+    private int currentTrackIndex = -1;
+    private AudioSource musicSource;
 
     private void Awake()
     {
-        if (instanse == null)
+        if (Instance == null)
         {
-            instanse = this;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        foreach (AudioSound s in sounds)
+        {
+            s.source = gameObject.AddComponent<AudioSource>();
+            s.source.clip = s.clip;
+            s.source.volume = s.volume;
+            s.source.loop = s.loop;
+        }
+
+        if (musicTracks.Length > 0)
+        {
+            musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource.loop = false;
+            musicSource.volume = 1f;
+        }
     }
 
+    public void Play(string soundName)
+    {
+        AudioSound s = System.Array.Find(sounds, sound => sound.name == soundName);
+        if (s == null)
+        {
+            Debug.LogWarning($"Звук '{soundName}' не найден!");
+            return;
+        }
+        s.source.Play();
+    }
 
+    public void Stop(string soundName)
+    {
+        AudioSound s = System.Array.Find(sounds, sound => sound.name == soundName);
+        if (s == null) return;
+        s.source.Stop();
+    }
+
+    public void SetVolume(string soundName, float volume)
+    {
+        AudioSound s = System.Array.Find(sounds, sound => sound.name == soundName);
+        if (s == null) return;
+        s.source.volume = volume;
+    }
+
+    public void PlayRandomTrack()
+    {
+        if (musicTracks.Length == 0) return;
+
+        int randomIndex = Random.Range(0, musicTracks.Length);
+        PlayMusicTrack(randomIndex);
+    }
+
+    // Воспроизведение следующего трека
+    public void PlayNextTrack()
+    {
+        if (musicTracks.Length == 0) return;
+
+        currentTrackIndex = (currentTrackIndex + 1) % musicTracks.Length;
+        PlayMusicTrack(currentTrackIndex);
+    }
+
+    private void PlayMusicTrack(int index)
+    {
+        if (index < 0 || index >= musicTracks.Length) return;
+
+        AudioSound track = musicTracks[index];
+        musicSource.clip = track.clip;
+        musicSource.volume = track.volume;
+        musicSource.Play();
+
+        // Ждем окончания трека и включаем следующий
+        StartCoroutine(WaitForTrackEnd());
+    }
+
+    private IEnumerator WaitForTrackEnd()
+    {
+        yield return new WaitForSeconds(musicSource.clip.length);
+        PlayNextTrack();
+    }
+
+    public void StopAllSounds()
+    {
+        foreach (AudioSound s in sounds)
+        {
+            s.source.Stop();
+        }
+
+        if (musicSource.isPlaying)
+        {
+            musicSource.Stop();
+        }
+    }
 }
