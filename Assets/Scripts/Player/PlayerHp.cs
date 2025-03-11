@@ -1,4 +1,3 @@
-using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -69,7 +68,7 @@ public class PlayerHp : NetworkBehaviour
             case 0: SetStandard(); break;
             case 1: SetGreen(); break;
             case 2: SetYellow(); break;
-            case 4: SetRed(); break;
+            case 3: SetRed(); break;
         }
     }
 
@@ -114,6 +113,7 @@ public class PlayerHp : NetworkBehaviour
 
     public void TakeDamage(int damage, ulong attackerId)
     {
+        if (IsOwner) return;
         if(!isDead)
         {
             DecreaseHpServerRpc(damage, attackerId);
@@ -150,13 +150,6 @@ public class PlayerHp : NetworkBehaviour
             item.SetActive(false);
         }
 
-        StartCoroutine(RespawnCoroutine());
-    }
-
-    private IEnumerator RespawnCoroutine()
-    {
-        yield return new WaitForSeconds(3f);
-
         RespawnServerRpc();
     }
 
@@ -174,6 +167,11 @@ public class PlayerHp : NetworkBehaviour
         player.SetActive(true);
         SetHealth(1000);
         UpdateClientRpc(healthPoints.Value);
+
+        if(IsHost)
+        {
+            playerBehaviour.SetPlayerState(PlayerState.Empty);
+        }
     }
 
     [ClientRpc]
@@ -182,7 +180,7 @@ public class PlayerHp : NetworkBehaviour
         if (IsOwner) 
         {
             playerMove.Spawn();
-            playerBehaviour.RespawnPlayerBehaviour();
+            playerBehaviour.RespawnPlayerBehaviour(playerBehaviour.currentState);
         }
     }
 

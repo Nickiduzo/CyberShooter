@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,25 +10,27 @@ public class PlayerBehaviour : NetworkBehaviour
     [SerializeField] private Animator animator;
 
     private GameObject[] fastSwords;
-    [SerializeField] private SwordsEquipment[] fastSwordsEquipment;
+    [SerializeField] private GameObject[] leftFastSwords;
+    [SerializeField] private GameObject[] rightFastSwords;
     private NetworkVariable<int> selectedFastSwordsIndex = new NetworkVariable<int>(0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
 
     private GameObject[] swords;
-    [SerializeField] private SwordsEquipment[] swordsEquipment;
+    [SerializeField] private GameObject[] leftSwords;
+    [SerializeField] private GameObject[] rightSwords;
     private NetworkVariable<int> selectedSwordsIndex = new NetworkVariable<int>(0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
     
     private GameObject sword;
-    [SerializeField] private SwordsEquipment[] swordEquipment;
+    [SerializeField] private GameObject[] hardSwords;
     private NetworkVariable<int> selectedSwordIndex = new NetworkVariable<int>(0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Owner);
 
     [SerializeField] private PlayerStats playerStats;
-
+    [SerializeField] private PlayerAttackTimer playerAttackTimer;
     [SerializeField] private PlayerData playerData;
 
     private void Awake()
@@ -47,23 +48,26 @@ public class PlayerBehaviour : NetworkBehaviour
 
         if (IsOwner)
         {
-            // ѕримен€ем сохраненный выбор меча
             SelectSwords(playerData.currentSwords);
             SelectFastSwords(playerData.currentFastSwords);
             SelectHardSword(playerData.currentSword);
         }
         else
         {
-            // ƒл€ других игроков просто примен€ем текущий выбор меча
             EquipSwords(selectedSwordsIndex.Value);
             EquipFastSwords(selectedFastSwordsIndex.Value);
             EquipHardSword(selectedSwordIndex.Value);
         }
+
+        EquipSwords(selectedSwordsIndex.Value);
+        EquipFastSwords(selectedFastSwordsIndex.Value);
+        EquipHardSword(selectedSwordIndex.Value);
     }
 
     private void Update()
     {
         if (!IsOwner) return;
+        if (playerAttackTimer.isKick) return;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -96,7 +100,7 @@ public class PlayerBehaviour : NetworkBehaviour
     [ClientRpc]
     private void SetPlayerStateClientRpc(PlayerState newState) => SetPlayerState(newState);
 
-    public void RespawnPlayerBehaviour()
+    public void RespawnPlayerBehaviour(PlayerState lastState)
     {
         if(IsOwner)
         {
@@ -105,7 +109,7 @@ public class PlayerBehaviour : NetworkBehaviour
         }
     }
 
-    private void SetPlayerState(PlayerState newState)
+    public void SetPlayerState(PlayerState newState)
     {
         currentState = newState;
 
@@ -150,14 +154,14 @@ public class PlayerBehaviour : NetworkBehaviour
         animator.SetLayerWeight(4, 0);
     }
 
-    private void SwordHandler()
-    {
-        animator.SetLayerWeight(3, 1);
-    }
-
     private void SwordsHandler()
     {
         animator.SetLayerWeight(2, 1);
+    }
+
+    private void SwordHandler()
+    {
+        animator.SetLayerWeight(3, 1);
     }
 
     private void FastSwordsHandler()
@@ -195,7 +199,8 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if(newIndex >= 0 && newIndex < swordsEquipment.Length)
+        if(newIndex >= 0 && leftSwords.Length > 0 && rightSwords.Length > 0 &&
+           newIndex < leftSwords.Length && newIndex < rightSwords.Length)
         {
             playerData.currentSwords = newIndex;
             selectedSwordsIndex.Value = newIndex;
@@ -204,9 +209,10 @@ public class PlayerBehaviour : NetworkBehaviour
 
     private void EquipSwords(int index)
     {
-        if(index >= 0 && index < swordsEquipment.Length)
+        if(index >= 0 && leftSwords.Length > 0 && rightSwords.Length > 0 &&
+           index < leftSwords.Length && index < rightSwords.Length)
         {
-            swords = swordsEquipment[index].leftAndRightSwords;
+            swords = new GameObject[] { leftSwords[index], rightSwords[index]};
         }
     }
 
@@ -214,7 +220,8 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if(newIndex >= 0 && newIndex < fastSwordsEquipment.Length)
+        if(newIndex >= 0 && leftFastSwords.Length > 0 && rightFastSwords.Length > 0 &&
+           newIndex < leftFastSwords.Length && newIndex < rightFastSwords.Length)
         {
             playerData.currentFastSwords = newIndex;
             selectedFastSwordsIndex.Value = newIndex;
@@ -223,9 +230,10 @@ public class PlayerBehaviour : NetworkBehaviour
 
     private void EquipFastSwords(int index)
     {
-        if(index >= 0 && index < fastSwordsEquipment.Length)
+        if(index >= 0 && leftFastSwords.Length > 0 && rightFastSwords.Length > 0 &&
+           index < leftFastSwords.Length && index < rightFastSwords.Length)
         {
-            fastSwords = fastSwordsEquipment[index].leftAndRightSwords;
+            fastSwords = new GameObject[] { leftFastSwords[index], rightFastSwords[index] };
         }
     }
 
@@ -233,7 +241,7 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if(newIndex >= 0 && newIndex < swordEquipment.Length)
+        if(newIndex >= 0 && hardSwords.Length > 0 && newIndex < hardSwords.Length)
         {
             playerData.currentSword = newIndex;
             selectedSwordIndex.Value = newIndex;
@@ -242,16 +250,10 @@ public class PlayerBehaviour : NetworkBehaviour
 
     private void EquipHardSword(int index)
     {
-        if(index >= 0 && index < swordEquipment.Length)
+        if(index >= 0 && hardSwords.Length > 0 && index < hardSwords.Length)
         {
-            sword = swordEquipment[index].leftAndRightSwords[0];
+            sword = hardSwords[index];
         }
     }
 }
 
-[Serializable]
-public class SwordsEquipment
-{
-    public int swordsIndex;
-    public GameObject[] leftAndRightSwords;
-}

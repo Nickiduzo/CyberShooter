@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -27,17 +26,20 @@ public class ArenaUI : NetworkBehaviour
     [SerializeField] private Animator damageAnimator;
     [SerializeField] private string[] damageAnimationNames;
 
-    private void Awake()
-    {
-        exitButton.onClick.AddListener(ExitFromArena);
-
-        Sword.ShowDamage += ShowDamageHandler;
-    }
-
     public override void OnNetworkSpawn()
     {
-        base.OnNetworkSpawn();
-        gameObject.SetActive(IsOwner);
+        if (IsOwner)
+        {
+            gameObject.SetActive(true);
+
+            exitButton.onClick.AddListener(ExitFromArena);
+
+            Sword.ShowDamage += ShowDamageHandler;
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void Update()

@@ -127,6 +127,7 @@ public class MenuUI : MonoBehaviour
             {
                 swords[i].SetActive(true);
                 swordsName.text = swords[i].name;
+                currentSwords = i;
             }
             else
             {
@@ -140,6 +141,7 @@ public class MenuUI : MonoBehaviour
             {
                 fastSwords[i].SetActive(true);
                 fastSwordsName.text = fastSwords[i].name;
+                currentFastSwords = i;
             }
             else
             {
@@ -153,6 +155,7 @@ public class MenuUI : MonoBehaviour
             {
                 hardSwords[i].SetActive(true);
                 swordName.text = hardSwords[i].name;
+                currentSword = i;
             }
             else
             {
@@ -195,6 +198,16 @@ public class MenuUI : MonoBehaviour
         skin.materials = new Material[] { playerData.body, playerData.cables, playerData.head, playerData.ribs };
         playerData.currentColor = 0;
     }
+    private void ChooseGreen()
+    {
+        skin.materials = new Material[] { playerData.bodyGreen, playerData.cablesGreen, playerData.headGreen, playerData.ribsGreen };
+        playerData.currentColor = 1;
+    }
+    private void ChooseYellow()
+    {
+        skin.materials = new Material[] { playerData.bodyYellow, playerData.cablesYellow, playerData.headYellow, playerData.ribsYellow };
+        playerData.currentColor = 2;
+    }
 
     private void ChooseRed()
     {
@@ -202,17 +215,7 @@ public class MenuUI : MonoBehaviour
         playerData.currentColor = 3;
     }
 
-    private void ChooseYellow()
-    {
-        skin.materials = new Material[] { playerData.bodyYellow, playerData.cablesYellow, playerData.headYellow, playerData.ribsYellow };
-        playerData.currentColor = 2;
-    }
 
-    private void ChooseGreen()
-    {
-        skin.materials = new Material[] { playerData.bodyGreen, playerData.cablesGreen, playerData.headGreen, playerData.ribsGreen };
-        playerData.currentColor = 1;
-    }
     private void RotatePlayer(float value)
     {
         player.transform.rotation = Quaternion.Euler(0, value, 0);
