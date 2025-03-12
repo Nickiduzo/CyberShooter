@@ -9,6 +9,7 @@ TagManager:
   - Building
   - Trash
   - Enemy
+  - Stairs
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Building
   - Enemy
   - RuneSpeed
-  - 
+  - Stairs
   - 
   - 
   - 

@@ -4,8 +4,8 @@ using UnityEngine;
 public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private PlayerAttackTimer attackTimer;
-
     [SerializeField] private PlayerData playerData;
+    [SerializeField] private Rigidbody rb;
 
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float runSpeed = 6f;
@@ -14,9 +14,6 @@ public class PlayerMove : NetworkBehaviour
     private float horizontalInput;
     private float verticalInput;
 
-    [SerializeField] private bool isKick = false;
-
-    [SerializeField] private Rigidbody rb;
     private Vector3 movementPosition;
 
     private NetworkVariable<Vector3> playerPosition = new NetworkVariable<Vector3>();
@@ -31,9 +28,7 @@ public class PlayerMove : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        isKick = attackTimer.GetKick();
-
-        if (!isKick)
+        if (!attackTimer.GetKick())
         {
             Move();
         }
@@ -62,7 +57,7 @@ public class PlayerMove : NetworkBehaviour
 
     private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 1.1f);
+        return Physics.CheckSphere(transform.position + Vector3.down * 0.2f, 0.3f);
     }
 
     [ServerRpc]

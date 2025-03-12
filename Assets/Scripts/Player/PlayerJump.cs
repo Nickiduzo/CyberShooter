@@ -6,10 +6,6 @@ public class PlayerJump : NetworkBehaviour
     [SerializeField] private float jumpForce = 3f;
     [SerializeField] private PlayerAnimation playerAnimation;
 
-    private bool isGrounded = false;
-
-    private float jumpCoolDown;
-
     private Rigidbody rb;
     private void Awake()
     {
@@ -21,39 +17,23 @@ public class PlayerJump : NetworkBehaviour
         if (!IsOwner) return;
 
         Jump();
-
-        if(jumpCoolDown > 0) jumpCoolDown -= Time.deltaTime;
     }
 
     private void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded && jumpCoolDown <= 0)
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             Vector3 jumpDirection = transform.forward + new Vector3(0,2,0);
             jumpDirection.Normalize();
 
             rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
             
-            isGrounded = false;
             playerAnimation.JumpServerRpc();
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private bool IsGrounded()
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-            jumpCoolDown = 1f;
-        }
-    }
-
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
+        return Physics.Raycast(transform.position, Vector3.down, 0.2f);
     }
 }
