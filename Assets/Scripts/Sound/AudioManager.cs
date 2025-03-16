@@ -6,6 +6,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
     public AudioSound[] sounds;
     public AudioSound[] musicTracks;
+    public SettingsData settings;
 
     private int currentTrackIndex = -1;
     private AudioSource musicSource;
@@ -27,7 +28,7 @@ public class AudioManager : MonoBehaviour
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
-            s.source.volume = s.volume;
+            s.source.volume = settings.EffectsAudio;
             s.source.loop = s.loop;
         }
 
@@ -35,7 +36,7 @@ public class AudioManager : MonoBehaviour
         {
             musicSource = gameObject.AddComponent<AudioSource>();
             musicSource.loop = false;
-            musicSource.volume = 1f;
+            musicSource.volume = settings.MusicAudio;
         }
     }
 
@@ -62,6 +63,22 @@ public class AudioManager : MonoBehaviour
         AudioSound s = System.Array.Find(sounds, sound => sound.name == soundName);
         if (s == null) return;
         s.source.volume = volume;
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        foreach (AudioSound sound in musicTracks)
+        {
+            sound.source.volume = value;
+        }
+    }
+
+    public void SetEffectsVolume(float value)
+    {
+        foreach (AudioSound sound in sounds)
+        {
+            sound.source.volume = value;
+        }
     }
 
     public void PlayRandomTrack()

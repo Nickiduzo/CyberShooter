@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59104715af3b7be41b81fc39776453b8, type: 3}
+  m_Name: SettingsData
+  m_EditorClassIdentifier: 
+  GeneralAudio: 0
+  MusicAudio: 37.6
+  EffectsAudio: 15.33
+  IsMuted: 0
+  Window: 0
+  FullScreen: 0
+  IsLow: 0
+  IsMedium: 0
+  IsUltra: 0
+  IsEffects: 0
+  IsFog: 0
+  IsLight: 0
