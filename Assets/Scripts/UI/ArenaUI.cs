@@ -132,6 +132,16 @@ public class ArenaUI : NetworkBehaviour
         }
     }
 
+    public void HoverSoundButton()
+    {
+        AudioManager.Instance.Play("HoverButton");
+    }
+
+    public void ClickSoundButton()
+    {
+        AudioManager.Instance.Play("ClickButton");
+    }
+
     private void ExitFromArena()
     {
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)

@@ -4,9 +4,19 @@ using UnityEngine;
 public class AudioSound 
 {
     public string name; 
-    public AudioClip clip; 
-    [Range(0f, 1f)] public float volume = 1f; 
-    public bool loop; 
+    public AudioClip clip;
+    public SettingsData settings;
+    public bool loop;
 
     [HideInInspector] public AudioSource source;
+    
+    public float GetEffectsVolume()
+    {
+        return settings.EffectsAudio;
+    }
+
+    public float GetMusicVolume()
+    {
+        return settings.MusicAudio;
+    }
 }

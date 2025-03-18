@@ -47,11 +47,54 @@ MonoBehaviour:
   sounds:
   - name: HoverButton
     clip: {fileID: 8300000, guid: e8c1fd4590b0dee428dbc43b2f46e355, type: 3}
-    volume: 0.6
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
     loop: 0
     source: {fileID: 0}
   - name: ClickButton
     clip: {fileID: 8300000, guid: af992868ac0ad0548a9f277d42ca6c14, type: 3}
-    volume: 0.6
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
     loop: 0
     source: {fileID: 0}
+  musicTracks:
+  - name: Angelic Beats
+    clip: {fileID: 8300000, guid: 90ca11f23a0bbf64ba44747f2667d867, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  - name: Her Reverb
+    clip: {fileID: 8300000, guid: 30a36e0113abea44fb81e09d88d53bec, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  - name: Insular
+    clip: {fileID: 8300000, guid: 13d9251e39b855f43b0e78b77a73696b, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  - name: Lonely Rooms
+    clip: {fileID: 8300000, guid: c31d3b83c9765d646a80742299f73fab, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  - name: Lunar Fields
+    clip: {fileID: 8300000, guid: c525a905aed13fd45b11a7c72c699e1e, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  - name: Standoff
+    clip: {fileID: 8300000, guid: 65f54df744d879e4c976653d57f676be, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  - name: The Stopper
+    clip: {fileID: 8300000, guid: 1e3d1a78a1d9eaf4c87024663fac889d, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  - name: Thesis
+    clip: {fileID: 8300000, guid: 0e4353e27043dc549a73fd8ab5c74e95, type: 3}
+    settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+    loop: 0
+    source: {fileID: 0}
+  settings: {fileID: 11400000, guid: bc7f4cc316768464aa79c09c04e6070c, type: 2}
+  currentTrackIndex: -1

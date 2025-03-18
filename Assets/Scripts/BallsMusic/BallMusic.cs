@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BallMusic : NetworkBehaviour
 {
-    [SerializeField] private Sound[] musics;
+    [SerializeField] private AudioSound[] musics;
     [SerializeField] private AudioSource musicSource;
 
     private NetworkVariable<int> trackIndex = new NetworkVariable<int>(
@@ -22,9 +22,11 @@ public class BallMusic : NetworkBehaviour
 
     private void PlayMusic(int index)
     {
+        if (AudioManager.Instance == null || AudioManager.Instance.IsMuted()) return;
         if (musics.Length == 0) return;
 
         musicSource.clip = musics[index].clip;
+        musicSource.volume = musics[index].GetMusicVolume();
         musicSource.Play();
     }
 

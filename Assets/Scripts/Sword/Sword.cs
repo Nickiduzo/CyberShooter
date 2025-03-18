@@ -5,6 +5,7 @@ using UnityEngine;
 public class Sword : MonoBehaviour
 {
     public static event Action<int> ShowDamage;
+    public static event Action SwordHit;
 
     public bool canDamage = false;
 
@@ -25,6 +26,7 @@ public class Sword : MonoBehaviour
             if(other.TryGetComponent(out PlayerHp playerHp))
             {
                 ShowDamage?.Invoke(swordDamage);
+                SwordHit?.Invoke();
                 playerHp.TakeDamage(swordDamage, NetworkManager.Singleton.LocalClientId);
             }
         }

@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59104715af3b7be41b81fc39776453b8, type: 3}
   m_Name: SettingsData
   m_EditorClassIdentifier: 
-  GeneralAudio: 0
-  MusicAudio: 37.6
-  EffectsAudio: 15.33
+  GeneralAudio: 0.7455382
+  PrevGeneralAudio: 0.33278003
+  MusicAudio: 0.13380949
+  EffectsAudio: 0.3391302
   IsMuted: 0
-  Window: 0
-  FullScreen: 0
-  IsLow: 0
+  Window: 1
+  FullScreen: 1
+  IsLow: 1
   IsMedium: 0
   IsUltra: 0
-  IsEffects: 0
-  IsFog: 0
-  IsLight: 0
+  IsEffects: 1
+  IsFog: 1
+  IsLight: 1

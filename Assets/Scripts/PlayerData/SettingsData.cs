@@ -4,8 +4,10 @@ using UnityEngine;
 public class SettingsData : ScriptableObject
 {
     public float GeneralAudio;
+    public float PrevGeneralAudio;
     public float MusicAudio;
     public float EffectsAudio;
+    
     public bool IsMuted;
 
     public bool Window;
