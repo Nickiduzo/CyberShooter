@@ -62,16 +62,11 @@ public class MenuUI : MonoBehaviour
 
     [SerializeField] private Button exitButton;
 
-    private void Awake()
+    private void Start()
     {
         Cursor.visible = true;
 
-        hostButton.onClick.AddListener(StartHost);
-        clientButton.onClick.AddListener(StartClient);
-        exitButton.onClick.AddListener(ExitGame);
-
         InitializeCharacterButtons();
-
         InitializeData();
 
         AudioManager.Instance.PlayRandomTrack();
@@ -79,6 +74,10 @@ public class MenuUI : MonoBehaviour
 
     private void InitializeCharacterButtons()
     {
+        hostButton.onClick.AddListener(StartHost);
+        clientButton.onClick.AddListener(StartClient);
+        exitButton.onClick.AddListener(ExitGame);
+
         colorButton.onClick.AddListener(ChooseColor);
         swordButton.onClick.AddListener(ChooseSword);
         fastSwordsButton.onClick.AddListener(ChooseFastSwords);
@@ -106,7 +105,6 @@ public class MenuUI : MonoBehaviour
 
     private void InitializeData()
     {
-        // realization of load texts and swords
         playerName.text = playerData.currentName;
 
         switch (playerData.currentColor)

@@ -44,10 +44,16 @@ public class SettingsManager : MonoBehaviour
         if (settingsData.IsMuted)
         {
             muteToggleTitle.text = "Muted";
+            generalAudioSlider.interactable = false;
+            musicVolumeSlider.interactable = false;
+            effectsVolumeSlider.interactable = false;
         }
         else
         {
             muteToggleTitle.text = "Unmuted";
+            generalAudioSlider.interactable = true;
+            musicVolumeSlider.interactable = true;
+            effectsVolumeSlider.interactable = true;
         }
     }
 

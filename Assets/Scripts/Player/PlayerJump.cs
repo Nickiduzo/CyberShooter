@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerJump : NetworkBehaviour
 {
+    public static event Action OnLand;
+
     [SerializeField] private float jumpForce = 3f;
     [SerializeField] private PlayerAnimation playerAnimation;
+
+    private bool wasInAir = false;
 
     private Rigidbody rb;
     private void Awake()
@@ -18,6 +22,7 @@ public class PlayerJump : NetworkBehaviour
         if (!IsOwner) return;
 
         Jump();
+        CheckLanding();
     }
 
     private void Jump()
@@ -28,8 +33,18 @@ public class PlayerJump : NetworkBehaviour
             jumpDirection.Normalize();
 
             rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
+            wasInAir = true;
             
             playerAnimation.JumpServerRpc();
+        }
+    }
+
+    private void CheckLanding()
+    {
+        if(wasInAir && IsGrounded() && !Input.GetKeyDown(KeyCode.Space))
+        {
+            wasInAir = false;
+            OnLand?.Invoke();
         }
     }
 

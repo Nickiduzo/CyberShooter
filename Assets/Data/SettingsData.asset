@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59104715af3b7be41b81fc39776453b8, type: 3}
   m_Name: SettingsData
   m_EditorClassIdentifier: 
-  GeneralAudio: 0.7455382
-  PrevGeneralAudio: 0.33278003
-  MusicAudio: 0.13380949
-  EffectsAudio: 0.3391302
+  GeneralAudio: 0.31585386
+  PrevGeneralAudio: 0.31585386
+  MusicAudio: 0.5364131
+  EffectsAudio: 0.3782763
   IsMuted: 0
   Window: 1
   FullScreen: 1

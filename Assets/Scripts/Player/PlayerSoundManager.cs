@@ -7,6 +7,7 @@ public class PlayerSoundManager : NetworkBehaviour
     [SerializeField] private AudioSource swordHitSource;
     [SerializeField] private AudioSource stepAudioSource;
     [SerializeField] private AudioSource jumpAudioSource;
+    [SerializeField] private AudioSource landAudioSource;
 
     public AudioSound swordHit;
     public AudioSound swordSwing;
@@ -19,6 +20,7 @@ public class PlayerSoundManager : NetworkBehaviour
         if(IsOwner)
         {
             Sword.SwordHit += MakeHit;
+            PlayerJump.OnLand += MakeLand;
         }
     }
 
@@ -58,9 +60,9 @@ public class PlayerSoundManager : NetworkBehaviour
     public void MakeLand()
     {
         if (AudioManager.Instance == null || AudioManager.Instance.IsMuted()) return;
-        jumpAudioSource.clip = land.clip;
-        jumpAudioSource.volume = land.GetEffectsVolume();
-        jumpAudioSource.Play();
+        landAudioSource.clip = land.clip;
+        landAudioSource.volume = land.GetEffectsVolume();
+        landAudioSource.Play();
     }
 
     public override void OnNetworkDespawn()
