@@ -20,7 +20,6 @@ public class PlayerMove : NetworkBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
     }
 

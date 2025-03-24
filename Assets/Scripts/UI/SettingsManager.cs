@@ -180,6 +180,8 @@ public class SettingsManager : MonoBehaviour
     private void SetQuality(int qualityIndex)
     {
         QualitySettings.SetQualityLevel(qualityIndex);
+        QualitySettings.vSyncCount = 0; 
+        Application.targetFrameRate = 256; 
     }
 
     private void SwitchLight()

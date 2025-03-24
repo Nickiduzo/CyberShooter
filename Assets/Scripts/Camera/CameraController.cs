@@ -14,7 +14,6 @@ public class CameraController : NetworkBehaviour
 
         playerCamera.gameObject.SetActive(IsOwner);
         virtualCamera.gameObject.SetActive(IsOwner);
-        Cursor.visible = IsOwner;
         audioListener.enabled = IsOwner;
     }
 }
