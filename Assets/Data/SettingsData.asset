@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GeneralAudio: 0.31585386
   PrevGeneralAudio: 0.31585386
-  MusicAudio: 0.5364131
+  MusicAudio: 0.2852135
   EffectsAudio: 0.3782763
   IsMuted: 0
   Window: 1
   FullScreen: 1
-  IsLow: 1
+  IsLow: 0
   IsMedium: 0
-  IsUltra: 0
+  IsUltra: 1
   IsEffects: 1
   IsFog: 1
   IsLight: 1
