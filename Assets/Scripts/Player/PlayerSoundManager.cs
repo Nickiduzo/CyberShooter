@@ -70,6 +70,7 @@ public class PlayerSoundManager : NetworkBehaviour
         if(IsOwner)
         {
             Sword.SwordHit -= MakeHit;
+            PlayerJump.OnLand -= MakeLand;
         }
     }
 }

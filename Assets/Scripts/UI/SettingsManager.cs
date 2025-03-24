@@ -158,6 +158,7 @@ public class SettingsManager : MonoBehaviour
         settingsData.IsLow = !settingsData.IsLow;
         settingsData.IsMedium = false;
         settingsData.IsUltra = false;
+        SetQuality(0);
     }
 
     private void MediumSettings()
@@ -165,6 +166,7 @@ public class SettingsManager : MonoBehaviour
         settingsData.IsLow = false;
         settingsData.IsMedium = !settingsData.IsMedium;
         settingsData.IsUltra = false;
+        SetQuality(1);
     }
 
     private void UltraSettings()
@@ -172,6 +174,12 @@ public class SettingsManager : MonoBehaviour
         settingsData.IsLow = false;
         settingsData.IsMedium = false;
         settingsData.IsUltra = !settingsData.IsUltra;
+        SetQuality(2);
+    }
+
+    private void SetQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex);
     }
 
     private void SwitchLight()

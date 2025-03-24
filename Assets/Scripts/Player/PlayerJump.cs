@@ -9,7 +9,8 @@ public class PlayerJump : NetworkBehaviour
     [SerializeField] private float jumpForce = 3f;
     [SerializeField] private PlayerAnimation playerAnimation;
 
-    private bool wasInAir = false;
+    private float timeInAir = 0f;
+    private float cooldown = 2f;
 
     private Rigidbody rb;
     private void Awake()
@@ -23,27 +24,36 @@ public class PlayerJump : NetworkBehaviour
 
         Jump();
         CheckLanding();
+
+        if (IsGrounded())
+        {
+            timeInAir = 0;
+            cooldown -= Time.deltaTime;
+        }
+        else
+        {
+            timeInAir += Time.deltaTime;
+        }
     }
 
     private void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded() && cooldown <= 0)
         {
             Vector3 jumpDirection = transform.forward + new Vector3(0,2,0);
             jumpDirection.Normalize();
 
             rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
-            wasInAir = true;
-            
+            cooldown = 2f;
+
             playerAnimation.JumpServerRpc();
         }
     }
 
     private void CheckLanding()
     {
-        if(wasInAir && IsGrounded() && !Input.GetKeyDown(KeyCode.Space))
+        if(timeInAir > 0.1f && IsGrounded())
         {
-            wasInAir = false;
             OnLand?.Invoke();
         }
     }
